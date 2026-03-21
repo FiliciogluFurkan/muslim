@@ -3,6 +3,7 @@ import {
   FlatList,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -17,6 +18,7 @@ import {
   getVersesForPage,
   getTranslation,
   getAvailableTranslations,
+  getAllSurahs,
   type QuranVerse,
 } from '../../lib/quranData';
 import { getSurahNameTurkish } from '../../lib/surahNames';
@@ -32,6 +34,8 @@ function parseId(raw: string | string[] | undefined): { mode: ReaderMode; num: n
   return { mode: 'surah', num: Number(s) || 1 };
 }
 
+const allSurahs = getAllSurahs();
+
 export default function SurahReaderScreen() {
   const { id } = useLocalSearchParams();
   const { mode, num } = parseId(id);
@@ -39,6 +43,7 @@ export default function SurahReaderScreen() {
   const { isDark, palette } = useTheme();
   const listRef = useRef<FlatList>(null);
   const [showMealPicker, setShowMealPicker] = useState(false);
+  const [showSurahPicker, setShowSurahPicker] = useState(false);
 
   // Store
   const fontSize = useMushafStore((s) => s.fontSize);
@@ -73,6 +78,15 @@ export default function SurahReaderScreen() {
     setFontSize(Math.max(FONT_MIN, Math.min(FONT_MAX, fontSize + delta)));
   };
 
+  // Navigation helpers
+  const canGoPrev = mode === 'surah' ? num > 1 : mode === 'juz' ? num > 1 : num > 1;
+  const canGoNext = mode === 'surah' ? num < 114 : mode === 'juz' ? num < 30 : num < 604;
+
+  const goTo = (n: number) => {
+    const prefix = mode === 'juz' ? 'juz_' : mode === 'page' ? 'page_' : '';
+    router.replace({ pathname: '/surah/[id]', params: { id: `${prefix}${n}` } });
+  };
+
   // Show besmele for surah mode (except surah 1 and 9)
   const showBesmele = mode === 'surah' && num !== 1 && num !== 9;
 
@@ -83,7 +97,6 @@ export default function SurahReaderScreen() {
         item.verse_number,
         selectedTranslation,
       );
-      // Show surah name for juz/page modes where multiple surahs may appear
       const showSurahLabel = mode !== 'surah' && item.verse_number === 1;
 
       return (
@@ -129,12 +142,19 @@ export default function SurahReaderScreen() {
         <Pressable onPress={() => router.back()} style={styles.back}>
           <Text style={[styles.backText, { color: palette.muted }]}>← Geri</Text>
         </Pressable>
-        <View style={styles.headerCenter}>
-          <Text style={[styles.surahName, { color: palette.fg }]}>{title}</Text>
+
+        {/* Tappable title → opens surah picker (surah mode only) */}
+        <Pressable
+          onPress={mode === 'surah' ? () => setShowSurahPicker(true) : undefined}
+          style={styles.headerCenter}
+        >
+          <Text style={[styles.surahName, { color: palette.fg }]}>
+            {title} {mode === 'surah' ? '▼' : ''}
+          </Text>
           <Text style={[styles.verseCount, { color: palette.soft }]}>{subtitle}</Text>
-        </View>
+        </Pressable>
+
         <View style={styles.headerActions}>
-          {/* Meal toggle */}
           <Pressable
             onPress={() => setShowTranslation(!showTranslation)}
             style={[
@@ -154,14 +174,12 @@ export default function SurahReaderScreen() {
               Meal
             </Text>
           </Pressable>
-          {/* Font küçült */}
           <Pressable
             onPress={() => changeFontSize(-2)}
             style={[styles.actionBtn, { borderColor: palette.soft }]}
           >
             <Text style={[styles.actionText, { color: palette.muted }]}>A-</Text>
           </Pressable>
-          {/* Font büyüt */}
           <Pressable
             onPress={() => changeFontSize(2)}
             style={[styles.actionBtn, { borderColor: palette.soft }]}
@@ -193,12 +211,49 @@ export default function SurahReaderScreen() {
         data={verses}
         keyExtractor={(v) => `${v.surah_number}_${v.verse_number}`}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 40, paddingHorizontal: 20 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 80, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
         initialNumToRender={15}
         maxToRenderPerBatch={20}
         windowSize={7}
       />
+
+      {/* Bottom navigation bar — prev / next */}
+      <View
+        style={[
+          styles.bottomNav,
+          {
+            backgroundColor: palette.card,
+            borderColor: palette.soft,
+            paddingBottom: insets.bottom + 8,
+          },
+        ]}
+      >
+        <Pressable
+          disabled={!canGoPrev}
+          onPress={() => goTo(num - 1)}
+          style={({ pressed }) => [
+            styles.navArrow,
+            { opacity: !canGoPrev ? 0.25 : pressed ? 0.5 : 1 },
+          ]}
+        >
+          <Text style={[styles.navArrowText, { color: palette.fg }]}>
+            ← {mode === 'surah' ? getSurahNameTurkish(num - 1) : `${num - 1}`}
+          </Text>
+        </Pressable>
+        <Pressable
+          disabled={!canGoNext}
+          onPress={() => goTo(num + 1)}
+          style={({ pressed }) => [
+            styles.navArrow,
+            { opacity: !canGoNext ? 0.25 : pressed ? 0.5 : 1 },
+          ]}
+        >
+          <Text style={[styles.navArrowText, { color: palette.fg }]}>
+            {mode === 'surah' ? getSurahNameTurkish(num + 1) : `${num + 1}`} →
+          </Text>
+        </Pressable>
+      </View>
 
       {/* Meal picker modal */}
       <Modal
@@ -234,6 +289,67 @@ export default function SurahReaderScreen() {
             ))}
           </View>
         </Pressable>
+      </Modal>
+
+      {/* Surah picker modal */}
+      <Modal
+        visible={showSurahPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowSurahPicker(false)}
+      >
+        <View style={[styles.surahPickerOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+          <View
+            style={[
+              styles.surahPickerContent,
+              { backgroundColor: palette.bg, paddingBottom: insets.bottom },
+            ]}
+          >
+            <View style={styles.surahPickerHeader}>
+              <Text style={[styles.modalTitle, { color: palette.fg }]}>Sure Seçin</Text>
+              <Pressable onPress={() => setShowSurahPicker(false)}>
+                <Text style={[styles.closeBtn, { color: palette.muted }]}>✕</Text>
+              </Pressable>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {allSurahs.map((s) => (
+                <Pressable
+                  key={s.number}
+                  onPress={() => {
+                    setShowSurahPicker(false);
+                    router.replace({
+                      pathname: '/surah/[id]',
+                      params: { id: String(s.number) },
+                    });
+                  }}
+                  style={({ pressed }) => [
+                    styles.surahPickerRow,
+                    {
+                      borderColor: palette.soft,
+                      opacity: pressed ? 0.5 : 1,
+                      backgroundColor: s.number === num ? palette.card : 'transparent',
+                    },
+                  ]}
+                >
+                  <Text style={[styles.surahPickerNum, { color: palette.soft }]}>
+                    {s.number}
+                  </Text>
+                  <View style={{ flex: 1, gap: 2 }}>
+                    <Text style={[styles.surahPickerName, { color: palette.fg }]}>
+                      {getSurahNameTurkish(s.number)}
+                    </Text>
+                    <Text style={[styles.surahPickerMeta, { color: palette.soft }]}>
+                      {s.verse_count} ayet
+                    </Text>
+                  </View>
+                  <Text style={[styles.surahPickerAr, { color: palette.muted }]}>
+                    {s.name_arabic}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
       </Modal>
     </View>
   );
@@ -315,7 +431,29 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  /* Modal */
+  /* Bottom nav */
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  navArrow: {
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
+  navArrowText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  /* Modals */
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -342,4 +480,36 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   modalOptionText: { fontSize: 16 },
+
+  /* Surah picker */
+  surahPickerOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  surahPickerContent: {
+    maxHeight: '70%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 16,
+  },
+  surahPickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+  },
+  closeBtn: { fontSize: 20, paddingHorizontal: 8 },
+  surahPickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    gap: 12,
+  },
+  surahPickerNum: { width: 28, fontSize: 13, textAlign: 'center' },
+  surahPickerName: { fontSize: 15, fontWeight: '500' },
+  surahPickerMeta: { fontSize: 11 },
+  surahPickerAr: { fontFamily: 'Amiri_400Regular', fontSize: 16 },
 });

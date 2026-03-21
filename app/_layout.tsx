@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { registerMushafBackgroundFetch } from '../lib/backgroundTask';
+import { useTheme } from '../hooks/useTheme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,14 +30,24 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: 'fade',
-            contentStyle: { backgroundColor: '#0d0d0f' },
-          }}
-        />
+        <ThemedStack />
       </SafeAreaProvider>
     </GestureHandlerRootView>
+  );
+}
+
+function ThemedStack() {
+  const { palette } = useTheme();
+
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade_from_bottom',
+        animationDuration: 200,
+        contentStyle: { backgroundColor: palette.bg },
+        gestureEnabled: true,
+      }}
+    />
   );
 }
