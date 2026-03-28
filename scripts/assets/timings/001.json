@@ -1,0 +1,41 @@
+{
+  "surahNumber": 1,
+  "totalDuration": 47.076,
+  "timings": [
+    {
+      "verseNumber": 1,
+      "start": 0.0,
+      "duration": 3.299
+    },
+    {
+      "verseNumber": 2,
+      "start": 3.299,
+      "duration": 6.199
+    },
+    {
+      "verseNumber": 3,
+      "start": 9.498,
+      "duration": 6.852
+    },
+    {
+      "verseNumber": 4,
+      "start": 16.35,
+      "duration": 6.251
+    },
+    {
+      "verseNumber": 5,
+      "start": 22.601,
+      "duration": 6.878
+    },
+    {
+      "verseNumber": 6,
+      "start": 29.479,
+      "duration": 2.699
+    },
+    {
+      "verseNumber": 7,
+      "start": 32.178,
+      "duration": 14.898
+    }
+  ]
+}

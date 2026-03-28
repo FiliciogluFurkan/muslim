@@ -8,7 +8,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { registerMushafBackgroundFetch } from '../lib/backgroundTask';
 import { useTheme } from '../hooks/useTheme';
 
-SplashScreen.preventAutoHideAsync();
+// Expo'nun native splash screen'ini hemen gizle
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -17,7 +18,10 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
+    if (loaded) {
+      // Font yüklendiğinde native splash'i gizle
+      SplashScreen.hideAsync().catch(() => {});
+    }
   }, [loaded]);
 
   useEffect(() => {

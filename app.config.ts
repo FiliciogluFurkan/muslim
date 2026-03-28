@@ -1,13 +1,13 @@
 import type { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
-  name: 'Mushaf',
-  slug: 'mushaf',
+  name: 'Furkan',
+  slug: 'furkan',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
-  scheme: 'mushaf',
+  scheme: 'furkan',
   splash: {
     image: './assets/splash-icon.png',
     resizeMode: 'contain',
@@ -16,7 +16,7 @@ const config: ExpoConfig = {
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.mushaf.app',
+    bundleIdentifier: 'com.furkan.app',
     infoPlist: {
       UIBackgroundModes: ['fetch'],
     },
@@ -28,7 +28,7 @@ const config: ExpoConfig = {
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
     },
-    package: 'com.mushaf.app',
+    package: 'com.furkan.app',
   },
   web: {
     favicon: './assets/favicon.png',
@@ -40,8 +40,8 @@ const config: ExpoConfig = {
       {
         widgets: [
           {
-            name: 'MushafVerse',
-            label: 'Mushaf — Günlük Ayet',
+            name: 'FurkanVerse',
+            label: 'Furkan — Günlük Ayet',
             description: 'Bugünün ayeti ve Türkçe meal',
             minWidth: '320dp',
             minHeight: '120dp',
