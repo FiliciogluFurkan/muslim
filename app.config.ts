@@ -5,11 +5,11 @@ const config: ExpoConfig = {
   slug: 'furkan',
   version: '1.0.0',
   orientation: 'portrait',
-  icon: './assets/icon.png',
+  icon: './assets/images/icon.png',
   userInterfaceStyle: 'automatic',
   scheme: 'furkan',
   splash: {
-    image: './assets/splash-icon.png',
+    image: './assets/images/splash-icon.png',
     resizeMode: 'contain',
     backgroundColor: '#0d0d0f',
   },
@@ -19,19 +19,25 @@ const config: ExpoConfig = {
     bundleIdentifier: 'com.furkan.app',
     infoPlist: {
       UIBackgroundModes: ['fetch'],
+      NSLocationWhenInUseUsageDescription: 'Namaz vakitlerini konumunuza göre hesaplamak için konum bilginize ihtiyacımız var.',
+      NSLocationAlwaysAndWhenInUseUsageDescription: 'Namaz vakitlerini konumunuza göre hesaplamak için konum bilginize ihtiyacımız var.',
     },
   },
   android: {
     adaptiveIcon: {
       backgroundColor: '#0d0d0f',
-      foregroundImage: './assets/android-icon-foreground.png',
-      backgroundImage: './assets/android-icon-background.png',
-      monochromeImage: './assets/android-icon-monochrome.png',
+      foregroundImage: './assets/images/android-icon-foreground.png',
+      backgroundImage: './assets/images/android-icon-background.png',
+      monochromeImage: './assets/images/android-icon-monochrome.png',
     },
     package: 'com.furkan.app',
+    permissions: [
+      'ACCESS_COARSE_LOCATION',
+      'ACCESS_FINE_LOCATION',
+    ],
   },
   web: {
-    favicon: './assets/favicon.png',
+    favicon: './assets/images/favicon.png',
   },
   plugins: [
     'expo-router',

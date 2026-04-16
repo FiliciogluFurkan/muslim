@@ -10,25 +10,24 @@ export type Palette = {
   input: string;
   accent: string;
 };
-
-const darkPalette: Palette = {
-  bg: '#0d0d0f',
-  fg: '#f2f2f0',
-  muted: '#9a9a9a',
-  soft: '#6b6b6b',
-  card: '#141416',
-  input: '#1a1a1c',
-  accent: '#c9a84c',
+const lightPalette = {
+  bg: '#EEF3EF',     // soft yeşilimsi açık arka plan (beyaz değil!)
+  fg: '#1E2420',
+  muted: '#7A847C',
+  soft: '#D6DED6',
+  card: '#FFFFFF',
+  input: '#F4F7F4',
+  accent: '#6F8F7A',
 };
 
-const lightPalette: Palette = {
-  bg: '#fafafa',
-  fg: '#111111',
-  muted: '#6b6b6b',
-  soft: '#9a9a9a',
-  card: '#f0f0f0',
-  input: '#e8e8e8',
-  accent: '#8b6914',
+const darkPalette = {
+  bg: '#1B1F1C',     // siyah değil, koyu yeşilimsi gri
+  fg: '#E8EEE9',
+  muted: '#9AA49C',
+  soft: '#2F3631',
+  card: '#242A25',
+  input: '#2B322C',
+  accent: '#7FAF95',
 };
 
 export function useTheme(): { isDark: boolean; palette: Palette } {

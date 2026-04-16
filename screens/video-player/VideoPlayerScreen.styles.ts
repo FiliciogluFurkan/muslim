@@ -9,15 +9,16 @@ export const styles = StyleSheet.create({
   },
   video: {
     position: 'absolute',
-    top: 0, left: 0, width, height,
+    top: 0,
+    left: 0,
+    width,
+    height,
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.38)',
     justifyContent: 'space-between',
   },
 
-  // ── Header ──────────────────────────────────────────────────────────────
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -27,20 +28,24 @@ export const styles = StyleSheet.create({
   },
   backButton: {
     width: 40,
-    alignItems: 'flex-start',
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   backText: {
     color: '#fff',
-    fontSize: 32,
-    lineHeight: 36,
-    fontWeight: '300',
+    fontSize: 28,
+    lineHeight: 30,
+    fontWeight: '400',
   },
   headerCenter: {
     alignItems: 'center',
     gap: 2,
   },
   headerLabel: {
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(255,255,255,0.62)',
     fontSize: 11,
     fontWeight: '600',
     letterSpacing: 2,
@@ -55,91 +60,62 @@ export const styles = StyleSheet.create({
     width: 40,
   },
 
-  // ── Ayet ────────────────────────────────────────────────────────────────
+  // ✅ Yazıların arkasına koyu katman
   verseContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center',        // flex-end → center (yazılar ortada)
     alignItems: 'center',
-    paddingHorizontal: 32,
-    gap: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    gap: 14,
+    marginHorizontal: 16,
+    marginVertical: 60,              // header ve bottom'dan uzak dursun
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',  // yarı saydam koyu arka plan
   },
   verseText: {
     fontFamily: 'Amiri_700Bold',
-    fontSize: 36,
+    fontSize: 42,
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 62,
+    lineHeight: 64,
     textShadowColor: 'rgba(0,0,0,0.9)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 10,
   },
   translationText: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.85)',
+    fontSize: 15,
+    color: 'rgba(255,255,255,0.95)',
     textAlign: 'center',
-    lineHeight: 26,
-    textShadowColor: 'rgba(0,0,0,0.8)',
+    lineHeight: 24,
+    textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 6,
   },
-  verseDots: {
-    flexDirection: 'row',
-    gap: 6,
-    marginTop: 8,
-  },
-  dot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-  },
-  dotActive: {
-    backgroundColor: '#fff',
-    width: 18,
-  },
 
-  // ── Kontroller ──────────────────────────────────────────────────────────
-  controls: {
+  bottomMeta: {
+    paddingHorizontal: 22,
     alignItems: 'center',
-    gap: 14,
-    paddingTop: 8,
+    gap: 8,
   },
   verseNumber: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 13,
-    letterSpacing: 1,
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 12,
+    letterSpacing: 0.8,
   },
-  controlRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 32,
+  progressTrack: {
+    width: '100%',
+    height: 2,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.34)',
+    overflow: 'hidden',
   },
-  skipButton: {
-    width: 48,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  skipText: {
-    fontSize: 28,
-    color: 'rgba(255,255,255,0.85)',
-  },
-  playButton: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 10,
   },
-  playButtonText: {
-    fontSize: 26,
-    color: '#000',
-    marginLeft: 3, // ▶ görsel ortalama
+  swipeHint: {
+    color: 'rgba(255,255,255,0.74)',
+    fontSize: 12,
   },
 });

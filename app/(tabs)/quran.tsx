@@ -1,3 +1,3 @@
-import VideoPlayerScreen from '../../screens/video-player/VideoPlayerScreen';
+import SurahListScreen from '../../screens/surah-list/SurahListScreen';
 
-export default VideoPlayerScreen;
+export default SurahListScreen;
