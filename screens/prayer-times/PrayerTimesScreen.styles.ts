@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { FONT } from '../../lib/typography';
 
 export const THEME = {
   bg: '#171412',
@@ -25,6 +26,7 @@ export const styles = StyleSheet.create({
   },
 
   loadingText: {
+    fontFamily: FONT.medium,
     color: THEME.textMuted,
     textAlign: 'center',
     marginTop: 80,
@@ -35,7 +37,57 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     marginBottom: 20,
   },
+  headerTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  cityBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: THEME.surface,
+    borderWidth: 1,
+    borderColor: THEME.border,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+  },
+  cityBtnIcon: { fontSize: 12 },
+  cityBtnText: { fontFamily: FONT.semibold, color: THEME.text, fontSize: 13, maxWidth: 140 },
+  cityBtnCaret: { color: THEME.textMuted, fontSize: 9 },
+
+  emptyWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 36,
+    gap: 8,
+  },
+  emptyEmoji: { fontSize: 60, marginBottom: 12 },
+  emptyTitle: { fontFamily: FONT.extrabold, color: THEME.text, fontSize: 26, letterSpacing: -0.5 },
+  emptyText: {
+    fontFamily: FONT.medium,
+    color: THEME.textMuted,
+    fontSize: 14,
+    lineHeight: 21,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  emptyPrimary: {
+    backgroundColor: THEME.accent,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 14,
+    marginBottom: 4,
+  },
+  emptyPrimaryText: { fontFamily: FONT.bold, color: '#20160A', fontSize: 15 },
+  emptyGhost: { paddingHorizontal: 24, paddingVertical: 12 },
+  emptyGhostText: { fontFamily: FONT.bold, color: THEME.accent, fontSize: 14 },
+
   headerEyebrow: {
+    fontFamily: FONT.bold,
     color: THEME.textMuted,
     fontSize: 11,
     letterSpacing: 2.4,
@@ -43,12 +95,13 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
   headerTitle: {
+    fontFamily: FONT.extrabold,
     color: THEME.text,
     fontSize: 30,
-    fontWeight: '700',
-    letterSpacing: -0.4,
+    letterSpacing: -0.6,
   },
   headerDate: {
+    fontFamily: FONT.medium,
     color: THEME.textSoft,
     fontSize: 13,
     marginTop: 6,
@@ -70,11 +123,11 @@ export const styles = StyleSheet.create({
     marginBottom: 14,
   },
   heroLabel: {
+    fontFamily: FONT.bold,
     color: THEME.textMuted,
     fontSize: 11,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    fontWeight: '600',
   },
   heroBadge: {
     backgroundColor: THEME.accentSoft,
@@ -83,9 +136,9 @@ export const styles = StyleSheet.create({
     borderRadius: 999,
   },
   heroBadgeText: {
+    fontFamily: FONT.bold,
     color: THEME.accent,
     fontSize: 10,
-    fontWeight: '700',
     letterSpacing: 0.8,
   },
   heroPrayerRow: {
@@ -95,10 +148,10 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
   },
   heroPrayerName: {
+    fontFamily: FONT.extrabold,
     color: THEME.text,
     fontSize: 28,
-    fontWeight: '700',
-    letterSpacing: -0.3,
+    letterSpacing: -0.5,
   },
   heroPrayerArabic: {
     color: THEME.textSoft,
@@ -113,19 +166,21 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   heroTimePillText: {
+    fontFamily: FONT.bold,
     color: THEME.text,
     fontSize: 14,
-    fontWeight: '700',
     letterSpacing: 0.2,
   },
   heroCountdown: {
-    fontSize: 56,
-    fontWeight: '700',
+    fontFamily: FONT.extrabold,
+    fontSize: 54,
     lineHeight: 62,
     marginBottom: 4,
     letterSpacing: 1,
+    fontVariant: ['tabular-nums'],
   },
   heroSub: {
+    fontFamily: FONT.medium,
     color: THEME.textMuted,
     fontSize: 12,
     marginBottom: 18,
@@ -165,15 +220,16 @@ export const styles = StyleSheet.create({
     flexShrink: 0,
   },
   alertText: {
+    fontFamily: FONT.medium,
     fontSize: 12,
     lineHeight: 18,
     flex: 1,
   },
 
   sectionTitle: {
+    fontFamily: FONT.extrabold,
     color: THEME.textSoft,
     fontSize: 12,
-    fontWeight: '700',
     letterSpacing: 2,
     textTransform: 'uppercase',
     marginBottom: 12,
@@ -225,9 +281,9 @@ export const styles = StyleSheet.create({
   },
 
   prayerName: {
+    fontFamily: FONT.semibold,
     color: THEME.text,
     fontSize: 15,
-    fontWeight: '600',
   },
   prayerNameActive: {
     color: THEME.accent,
@@ -243,9 +299,10 @@ export const styles = StyleSheet.create({
   },
 
   prayerTime: {
+    fontFamily: FONT.bold,
     color: THEME.textSoft,
     fontSize: 16,
-    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
   },
   prayerTimeActive: {
     color: THEME.accent,
@@ -261,9 +318,9 @@ export const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   inlineBadgeText: {
+    fontFamily: FONT.bold,
     color: THEME.accent,
     fontSize: 8,
-    fontWeight: '700',
     letterSpacing: 0.8,
   },
 
@@ -297,14 +354,15 @@ export const styles = StyleSheet.create({
     backgroundColor: THEME.danger,
   },
   kerahatName: {
+    fontFamily: FONT.semibold,
     color: THEME.text,
     fontSize: 13,
-    fontWeight: '500',
   },
   kerahatRange: {
+    fontFamily: FONT.semibold,
     color: THEME.textSoft,
     fontSize: 12,
-    fontWeight: '600',
+    fontVariant: ['tabular-nums'],
   },
 
   ornament: {

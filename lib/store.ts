@@ -5,10 +5,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export type TranslationId = 'diyanet' | 'elmali';
 export type ThemeMode = 'system' | 'dark' | 'light';
 
+export type ManualLocation = {
+  latitude: number;
+  longitude: number;
+  city: string;
+} | null;
+
 type MushafState = {
   /* widget sync */
   lastSyncedDateSeed: number | null;
   setLastSyncedDateSeed: (seed: number) => void;
+
+  /* namaz vakti için sabit konum (null → otomatik/GPS) */
+  manualLocation: ManualLocation;
+  setManualLocation: (loc: ManualLocation) => void;
 
   /* meal seçimi */
   selectedTranslation: TranslationId;
@@ -33,6 +43,9 @@ export const useMushafStore = create<MushafState>()(
       lastSyncedDateSeed: null,
       setLastSyncedDateSeed: (seed) => set({ lastSyncedDateSeed: seed }),
 
+      manualLocation: null,
+      setManualLocation: (loc) => set({ manualLocation: loc }),
+
       selectedTranslation: 'diyanet',
       setSelectedTranslation: (id) => set({ selectedTranslation: id }),
 
@@ -53,6 +66,7 @@ export const useMushafStore = create<MushafState>()(
         fontSize: state.fontSize,
         themeMode: state.themeMode,
         showTranslation: state.showTranslation,
+        manualLocation: state.manualLocation,
       }),
     },
   ),

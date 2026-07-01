@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Modal,
@@ -24,8 +24,49 @@ import {
 import { getSurahNameTurkish } from '../../lib/surahNames';
 import { useTheme } from '../../hooks/useTheme';
 import { useMushafStore } from '../../lib/store';
+import { FONT } from '../../lib/typography';
+import type { Palette } from '../../hooks/useTheme';
 
 type ReaderMode = 'surah' | 'juz' | 'page';
+
+/** Ayet satırı — yeniden render'ı azaltmak için memoize edildi. */
+const VerseRow = memo(function VerseRow({
+  item,
+  mode,
+  fontSize,
+  trans,
+  showSurahLabel,
+  palette,
+}: {
+  item: QuranVerse;
+  mode: ReaderMode;
+  fontSize: number;
+  trans: string | null;
+  showSurahLabel: boolean;
+  palette: Palette;
+}) {
+  return (
+    <View style={[styles.verseCard, { borderColor: palette.soft }]}>
+      {showSurahLabel && (
+        <Text style={[styles.surahLabel, { color: palette.accent }]}>
+          {getSurahNameTurkish(item.surah_number)}
+        </Text>
+      )}
+      <View style={styles.verseNumRow}>
+        <Text style={[styles.verseNum, { color: palette.accent }]}>
+          {mode === 'surah' ? item.verse_number : `${item.surah_number}:${item.verse_number}`}
+        </Text>
+        <Text style={[styles.juzTag, { color: palette.soft }]}>
+          Cüz {item.juz_number} · Sayfa {item.page_number}
+        </Text>
+      </View>
+      <Text style={[styles.arabic, { color: palette.fg, fontSize, lineHeight: fontSize * 1.9 }]}>
+        {item.arabic}
+      </Text>
+      {trans ? <Text style={[styles.turkish, { color: palette.muted }]}>{trans}</Text> : null}
+    </View>
+  );
+});
 
 function parseId(raw: string | string[] | undefined): { mode: ReaderMode; num: number } {
   const s = Array.isArray(raw) ? raw[0] : (raw ?? '1');
@@ -92,46 +133,29 @@ export default function SurahReaderScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: QuranVerse }) => {
-      const trans = getTranslation(
-        item.surah_number,
-        item.verse_number,
-        selectedTranslation,
-      );
+      const trans = showTranslation
+        ? getTranslation(item.surah_number, item.verse_number, selectedTranslation)
+        : null;
       const showSurahLabel = mode !== 'surah' && item.verse_number === 1;
-
       return (
-        <View style={[styles.verseCard, { borderColor: palette.soft }]}>
-          {showSurahLabel && (
-            <Text style={[styles.surahLabel, { color: palette.accent }]}>
-              {getSurahNameTurkish(item.surah_number)}
-            </Text>
-          )}
-          <View style={styles.verseNumRow}>
-            <Text style={[styles.verseNum, { color: palette.soft }]}>
-              {mode === 'surah'
-                ? item.verse_number
-                : `${item.surah_number}:${item.verse_number}`}
-            </Text>
-            <Text style={[styles.juzTag, { color: palette.soft }]}>
-              Cüz {item.juz_number} · Sayfa {item.page_number}
-            </Text>
-          </View>
-          <Text
-            style={[
-              styles.arabic,
-              { color: palette.fg, fontSize, lineHeight: fontSize * 1.9 },
-            ]}
-          >
-            {item.arabic}
-          </Text>
-          {showTranslation && trans ? (
-            <Text style={[styles.turkish, { color: palette.muted }]}>{trans}</Text>
-          ) : null}
-        </View>
+        <VerseRow
+          item={item}
+          mode={mode}
+          fontSize={fontSize}
+          trans={trans ?? null}
+          showSurahLabel={showSurahLabel}
+          palette={palette}
+        />
       );
     },
     [palette, fontSize, showTranslation, selectedTranslation, mode],
   );
+
+  const ListHeader = showBesmele ? (
+    <Text style={[styles.basmala, { color: palette.muted, fontSize: fontSize * 0.9 }]}>
+      بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+    </Text>
+  ) : null;
 
   return (
     <View style={[styles.root, { backgroundColor: palette.bg }]}>
@@ -199,23 +223,18 @@ export default function SurahReaderScreen() {
         <Text style={[styles.mealBarArrow, { color: palette.soft }]}>▼</Text>
       </Pressable>
 
-      {/* Besmele */}
-      {showBesmele && (
-        <Text style={[styles.basmala, { color: palette.muted, fontSize: fontSize * 0.9 }]}>
-          بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-        </Text>
-      )}
-
       <FlatList
         ref={listRef}
         data={verses}
         keyExtractor={(v) => `${v.surah_number}_${v.verse_number}`}
         renderItem={renderItem}
+        ListHeaderComponent={ListHeader}
         contentContainerStyle={{ paddingBottom: insets.bottom + 80, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
-        initialNumToRender={15}
-        maxToRenderPerBatch={20}
-        windowSize={7}
+        initialNumToRender={12}
+        maxToRenderPerBatch={10}
+        windowSize={9}
+        removeClippedSubviews
       />
 
       {/* Bottom navigation bar — prev / next */}
@@ -366,18 +385,18 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   back: { minWidth: 48 },
-  backText: { fontSize: 14 },
+  backText: { fontFamily: FONT.semibold, fontSize: 14 },
   headerCenter: { flex: 1, alignItems: 'center', gap: 2 },
-  surahName: { fontSize: 16, fontWeight: '500' },
-  verseCount: { fontSize: 12 },
+  surahName: { fontFamily: FONT.bold, fontSize: 16.5 },
+  verseCount: { fontFamily: FONT.medium, fontSize: 12 },
   headerActions: { flexDirection: 'row', gap: 6 },
   actionBtn: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
   },
-  actionText: { fontSize: 12 },
+  actionText: { fontFamily: FONT.bold, fontSize: 12 },
 
   /* Meal bar */
   mealBar: {
@@ -391,15 +410,16 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     gap: 6,
   },
-  mealBarLabel: { fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
-  mealBarValue: { flex: 1, fontSize: 14 },
+  mealBarLabel: { fontFamily: FONT.bold, fontSize: 11, textTransform: 'uppercase', letterSpacing: 1 },
+  mealBarValue: { flex: 1, fontFamily: FONT.semibold, fontSize: 14 },
   mealBarArrow: { fontSize: 10 },
 
   /* Besmele */
   basmala: {
     fontFamily: 'Amiri_400Regular',
     textAlign: 'center',
-    paddingVertical: 20,
+    paddingTop: 18,
+    paddingBottom: 8,
     paddingHorizontal: 24,
     lineHeight: 48,
   },
@@ -411,8 +431,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   surahLabel: {
+    fontFamily: FONT.bold,
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 4,
   },
   verseNumRow: {
@@ -420,13 +440,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  verseNum: { fontSize: 12 },
-  juzTag: { fontSize: 11 },
+  verseNum: { fontFamily: FONT.bold, fontSize: 12.5 },
+  juzTag: { fontFamily: FONT.medium, fontSize: 11 },
   arabic: {
     fontFamily: 'Amiri_400Regular',
     textAlign: 'right',
   },
   turkish: {
+    fontFamily: FONT.regular,
     fontSize: 15,
     lineHeight: 24,
   },
@@ -449,8 +470,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   navArrowText: {
+    fontFamily: FONT.semibold,
     fontSize: 14,
-    fontWeight: '500',
   },
 
   /* Modals */
@@ -466,7 +487,7 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 16,
   },
-  modalTitle: { fontSize: 18, fontWeight: '600' },
+  modalTitle: { fontFamily: FONT.extrabold, fontSize: 19 },
   modalOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -479,7 +500,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
   },
-  modalOptionText: { fontSize: 16 },
+  modalOptionText: { fontFamily: FONT.semibold, fontSize: 16 },
 
   /* Surah picker */
   surahPickerOverlay: {
@@ -508,8 +529,8 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     gap: 12,
   },
-  surahPickerNum: { width: 28, fontSize: 13, textAlign: 'center' },
-  surahPickerName: { fontSize: 15, fontWeight: '500' },
-  surahPickerMeta: { fontSize: 11 },
+  surahPickerNum: { fontFamily: FONT.bold, width: 28, fontSize: 13, textAlign: 'center' },
+  surahPickerName: { fontFamily: FONT.semibold, fontSize: 15 },
+  surahPickerMeta: { fontFamily: FONT.medium, fontSize: 11 },
   surahPickerAr: { fontFamily: 'Amiri_400Regular', fontSize: 16 },
 });

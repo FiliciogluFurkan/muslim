@@ -11,7 +11,8 @@ const config: ExpoConfig = {
   splash: {
     image: './assets/images/splash-icon.png',
     resizeMode: 'contain',
-    backgroundColor: '#0d0d0f',
+    // JS splash ekranıyla birebir aynı → Android'de renk sıçraması olmaz
+    backgroundColor: '#12271E',
   },
   assetBundlePatterns: ['**/*'],
   ios: {

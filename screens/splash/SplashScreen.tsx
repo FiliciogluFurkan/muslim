@@ -1,142 +1,205 @@
 // SplashScreen.tsx
 import { useEffect, useRef } from 'react';
-import { View, Text, Animated, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Animated, StyleSheet, Easing } from 'react-native';
 import { router } from 'expo-router';
-import Svg, { Circle, Polygon, Line, Defs, RadialGradient, Stop } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Circle, Polygon, Defs, RadialGradient, Stop } from 'react-native-svg';
+import { FONT } from '../../lib/typography';
 
-const { width, height } = Dimensions.get('window');
-const CX = width / 2;
-const R = Math.min(width, height) * 0.38; // yıldız yarıçapı
+// İmza renkleri — uygulamanın zümrüt kimliğiyle uyumlu: derin yeşil + nane + altın.
+const BG = '#12271E';
+const GOLD = '#C9A24B';
+const MINT = '#8FE6C0';
+const CREAM = '#EAD9A8';
+
+// Motif sabit bir kare viewBox içinde çizilir → hiçbir ekranda kaymaz.
+const SIZE = 300;
+const C = SIZE / 2;
+const R = SIZE * 0.4;
+
+// 16 köşeli yıldız noktaları (dış/iç yarıçap değişimli)
+const starPoints = (outer: number, inner: number, count = 8) =>
+  [...Array(count * 2)]
+    .map((_, i) => {
+      const angle = (Math.PI / count) * i - Math.PI / 2;
+      const r = i % 2 === 0 ? outer : inner;
+      return `${C + r * Math.cos(angle)},${C + r * Math.sin(angle)}`;
+    })
+    .join(' ');
+
+const polyPoints = (count: number, radius: number, offset = 0) =>
+  [...Array(count)]
+    .map((_, i) => {
+      const angle = ((Math.PI * 2) / count) * i - Math.PI / 2 + offset;
+      return `${C + radius * Math.cos(angle)},${C + radius * Math.sin(angle)}`;
+    })
+    .join(' ');
 
 export default function SplashScreen() {
-  const ringOpacity  = useRef(new Animated.Value(0)).current;
-  const ringScale    = useRef(new Animated.Value(0.88)).current;
-  const textOpacity  = useRef(new Animated.Value(0)).current;
-  const textSlide    = useRef(new Animated.Value(15)).current;
-  const subOpacity   = useRef(new Animated.Value(0)).current;
+  const insets = useSafeAreaInsets();
+
+  const motifOpacity = useRef(new Animated.Value(0)).current;
+  const motifScale = useRef(new Animated.Value(0.85)).current;
+  const spin = useRef(new Animated.Value(0)).current;
+  const textOpacity = useRef(new Animated.Value(0)).current;
+  const textScale = useRef(new Animated.Value(0.9)).current;
+  const metaOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // 1) Geometrik motif beliriyor
+    // 1) Geometrik motif belirir + hafif yaylı büyüme
     Animated.parallel([
-      Animated.timing(ringOpacity, {
-        toValue: 1, duration: 1000, delay: 150, useNativeDriver: true,
+      Animated.timing(motifOpacity, {
+        toValue: 1,
+        duration: 900,
+        delay: 120,
+        useNativeDriver: true,
       }),
-      Animated.spring(ringScale, {
-        toValue: 1, friction: 8, tension: 50, delay: 150, useNativeDriver: true,
+      Animated.spring(motifScale, {
+        toValue: 1,
+        friction: 7,
+        tension: 45,
+        delay: 120,
+        useNativeDriver: true,
       }),
     ]).start();
 
-    // 2) Arapça yazı
+    // Motif çok yavaş dönerek "canlı" durur
+    Animated.loop(
+      Animated.timing(spin, {
+        toValue: 1,
+        duration: 60000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ).start();
+
+    // 2) Arapça logo
     Animated.parallel([
       Animated.timing(textOpacity, {
-        toValue: 1, duration: 800, delay: 700, useNativeDriver: true,
+        toValue: 1,
+        duration: 800,
+        delay: 650,
+        useNativeDriver: true,
       }),
-      Animated.timing(textSlide, {
-        toValue: 0, duration: 800, delay: 700, useNativeDriver: true,
+      Animated.spring(textScale, {
+        toValue: 1,
+        friction: 7,
+        tension: 60,
+        delay: 650,
+        useNativeDriver: true,
       }),
     ]).start();
 
-    // 3) Alt yazı
-    Animated.timing(subOpacity, {
-      toValue: 1, duration: 600, delay: 1200, useNativeDriver: true,
+    // 3) Alt bilgi
+    Animated.timing(metaOpacity, {
+      toValue: 1,
+      duration: 700,
+      delay: 1150,
+      useNativeDriver: true,
     }).start();
 
-    const timer = setTimeout(() => router.replace('/(tabs)'), 2800);
+    const timer = setTimeout(() => router.replace('/(tabs)'), 2700);
     return () => clearTimeout(timer);
   }, []);
 
-  // 8 köşeli yıldız noktaları
-  const star = (r1: number, r2: number, points = 8) => {
-    const pts: string[] = [];
-    for (let i = 0; i < points * 2; i++) {
-      const angle = (Math.PI / points) * i - Math.PI / 2;
-      const r = i % 2 === 0 ? r1 : r2;
-      pts.push(`${CX + r * Math.cos(angle)},${height / 2 + r * Math.sin(angle)}`);
-    }
-    return pts.join(' ');
-  };
-
-  const MY = height / 2 - 30; // dikey merkez (yazıya yer bırakmak için biraz yukarı)
+  const spinDeg = spin.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   return (
     <View style={styles.root}>
-      {/* SVG geometrik arka plan katmanı */}
-      <Animated.View style={{ opacity: ringOpacity, transform: [{ scale: ringScale }], ...StyleSheet.absoluteFillObject }}>
-        <Svg width={width} height={height}>
-          <Defs>
-            <RadialGradient id="glow" cx="50%" cy="50%" rx="50%" ry="50%">
-              <Stop offset="0%" stopColor="#c9963a" stopOpacity="0.18" />
-              <Stop offset="100%" stopColor="#c9963a" stopOpacity="0" />
-            </RadialGradient>
-          </Defs>
+      {/* Ortalanmış motif + logo — flex ile merkezde, kayma yok */}
+      <View style={styles.center}>
+        <Animated.View
+          style={{
+            opacity: motifOpacity,
+            transform: [{ scale: motifScale }],
+          }}
+        >
+          <View style={{ width: SIZE, height: SIZE }}>
+            {/* Yavaş dönen dış motif */}
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFillObject,
+                { transform: [{ rotate: spinDeg }] },
+              ]}
+            >
+              <Svg width={SIZE} height={SIZE}>
+                <Defs>
+                  <RadialGradient id="glow" cx="50%" cy="50%" rx="50%" ry="50%">
+                    <Stop offset="0%" stopColor={GOLD} stopOpacity="0.16" />
+                    <Stop offset="100%" stopColor={GOLD} stopOpacity="0" />
+                  </RadialGradient>
+                </Defs>
 
-          {/* Ambient glow */}
-          <Circle cx={CX} cy={MY} r={R * 1.4} fill="url(#glow)" />
+                <Circle cx={C} cy={C} r={R * 1.35} fill="url(#glow)" />
 
-          {/* Dış ince çemberler */}
-          <Circle cx={CX} cy={MY} r={R * 1.08} fill="none" stroke="#c9963a" strokeWidth={0.6} strokeOpacity={0.3} />
-          <Circle cx={CX} cy={MY} r={R * 0.92} fill="none" stroke="#c9963a" strokeWidth={0.4} strokeOpacity={0.2} />
+                {/* Dış ince çemberler (nane) */}
+                <Circle cx={C} cy={C} r={R * 1.08} fill="none" stroke={MINT} strokeWidth={0.6} strokeOpacity={0.24} />
+                <Circle cx={C} cy={C} r={R * 0.92} fill="none" stroke={MINT} strokeWidth={0.4} strokeOpacity={0.18} />
 
-          {/* 8 kollu yıldız */}
-          <Polygon
-            points={[...Array(16)].map((_, i) => {
-              const angle = (Math.PI / 8) * i - Math.PI / 2;
-              const r = i % 2 === 0 ? R * 0.8 : R * 0.19;
-              return `${CX + r * Math.cos(angle)},${MY + r * Math.sin(angle)}`;
-            }).join(' ')}
-            fill="none" stroke="#c9963a" strokeWidth={1} strokeOpacity={0.55}
-          />
+                {/* 8 kollu yıldız (altın) */}
+                <Polygon points={starPoints(R * 0.8, R * 0.19)} fill="none" stroke={GOLD} strokeWidth={1.1} strokeOpacity={0.6} />
 
-          {/* İç kare 45° */}
-          <Polygon
-            points={[0, 1, 2, 3].map(i => {
-              const angle = (Math.PI / 2) * i + Math.PI / 4;
-              const r = R * 0.57;
-              return `${CX + r * Math.cos(angle)},${MY + r * Math.sin(angle)}`;
-            }).join(' ')}
-            fill="none" stroke="#c9963a" strokeWidth={0.8} strokeOpacity={0.4}
-          />
+                {/* İç sekizgen (nane) */}
+                <Polygon points={polyPoints(8, R * 0.39)} fill="none" stroke={MINT} strokeWidth={0.7} strokeOpacity={0.34} />
 
-          {/* İç sekizgen -->  */}
-          <Polygon
-            points={[...Array(8)].map((_, i) => {
-              const angle = (Math.PI / 4) * i - Math.PI / 2;
-              const r = R * 0.39;
-              return `${CX + r * Math.cos(angle)},${MY + r * Math.sin(angle)}`;
-            }).join(' ')}
-            fill="none" stroke="#c9963a" strokeWidth={0.7} strokeOpacity={0.35}
-          />
+                {/* Köşe noktaları (altın) */}
+                {[0, 1, 2, 3].map((i) => {
+                  const angle = (Math.PI / 2) * i - Math.PI / 2;
+                  return (
+                    <Circle
+                      key={`o${i}`}
+                      cx={C + R * 0.8 * Math.cos(angle)}
+                      cy={C + R * 0.8 * Math.sin(angle)}
+                      r={3}
+                      fill={GOLD}
+                      fillOpacity={0.75}
+                    />
+                  );
+                })}
+              </Svg>
+            </Animated.View>
 
-          {/* İç dolgu dairesi */}
-          <Circle cx={CX} cy={MY} r={R * 0.335}
-            fill="rgba(201,150,58,0.06)" stroke="#c9963a" strokeWidth={0.8} strokeOpacity={0.5} />
+            {/* Sabit iç dolgu dairesi (dönmüyor) */}
+            <Svg width={SIZE} height={SIZE} style={StyleSheet.absoluteFillObject}>
+              <Circle
+                cx={C}
+                cy={C}
+                r={R * 0.34}
+                fill="rgba(201,162,75,0.07)"
+                stroke={GOLD}
+                strokeWidth={0.8}
+                strokeOpacity={0.5}
+              />
+            </Svg>
 
-          {/* 4 ana köşe noktası */}
-          {[0, 1, 2, 3].map(i => {
-            const angle = (Math.PI / 2) * i - Math.PI / 2;
-            return <Circle key={i} cx={CX + R * 0.8 * Math.cos(angle)} cy={MY + R * 0.8 * Math.sin(angle)} r={3} fill="#c9963a" fillOpacity={0.7} />;
-          })}
+            {/* Arapça logo — motifin tam ortasında */}
+            <Animated.Text
+              style={[
+                styles.arabicText,
+                {
+                  width: SIZE,
+                  height: SIZE,
+                  opacity: textOpacity,
+                  transform: [{ scale: textScale }],
+                },
+              ]}
+            >
+              فُرقان
+            </Animated.Text>
+          </View>
+        </Animated.View>
+      </View>
 
-          {/* Ara noktalar */}
-          {[1, 3, 5, 7].map(i => {
-            const angle = (Math.PI / 4) * i - Math.PI / 4;
-            return <Circle key={i} cx={CX + R * 0.565 * Math.cos(angle)} cy={MY + R * 0.565 * Math.sin(angle)} r={2} fill="#c9963a" fillOpacity={0.35} />;
-          })}
-        </Svg>
-      </Animated.View>
-
-      {/* Arapça logo yazısı */}
-      <Animated.Text
+      {/* Alt bilgi — güvenli alan içinde */}
+      <Animated.View
         style={[
-          styles.arabicText,
-          { top: MY - 60, opacity: textOpacity, transform: [{ translateY: textSlide }] },
+          styles.bottomMeta,
+          { opacity: metaOpacity, bottom: insets.bottom + 48 },
         ]}
       >
-        فُرقان
-      </Animated.Text>
-
-      {/* Alt bilgi */}
-      <Animated.View style={[styles.bottomMeta, { opacity: subOpacity }]}>
         <Text style={styles.appNameLatin}>FURKAN</Text>
         <View style={styles.divider} />
         <Text style={styles.subtitle}>KUR'AN-I KERİM</Text>
@@ -148,42 +211,48 @@ export default function SplashScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#0e0b06',
+    backgroundColor: BG,
+  },
+  center: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   arabicText: {
     position: 'absolute',
-    width: '100%',
     textAlign: 'center',
+    textAlignVertical: 'center',
+    lineHeight: SIZE,
     fontFamily: 'Amiri_700Bold',
-    fontSize: 68,
-    color: '#dfc47a',
-    letterSpacing: 4,
+    fontSize: 62,
+    color: CREAM,
+    letterSpacing: 2,
   },
   bottomMeta: {
     position: 'absolute',
-    bottom: 90,
+    left: 0,
+    right: 0,
     alignItems: 'center',
     gap: 10,
   },
   appNameLatin: {
-    color: '#c9963a',
+    fontFamily: FONT.bold,
+    color: GOLD,
     fontSize: 13,
-    fontWeight: '500',
     letterSpacing: 8,
-    opacity: 0.75,
+    opacity: 0.85,
   },
   divider: {
-    width: 40,
-    height: 0.5,
-    backgroundColor: '#c9963a',
-    opacity: 0.4,
+    width: 44,
+    height: 1,
+    backgroundColor: GOLD,
+    opacity: 0.45,
   },
   subtitle: {
-    color: '#c9963a',
+    fontFamily: FONT.semibold,
+    color: CREAM,
     fontSize: 11,
     letterSpacing: 4,
-    opacity: 0.45,
+    opacity: 0.5,
   },
 });

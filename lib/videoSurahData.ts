@@ -15,9 +15,11 @@ export interface SurahVideoData {
   verses: VerseWithTiming[];
 }
 
-// ─── Local asset'ler ───────────────────────────────────────────────────────
-const AUDIO: Record<number, any> = {
-  1: require('../scripts/assets/audio/001.mp3'),
+// ─── Audio kaynakları ───────────────────────────────────────────────────────
+// Yerel: scripts/assets/audio/001.mp3 (gitignore'da)
+// Geliştirme için uzak CDN kullanılır
+const AUDIO: Record<number, string> = {
+  1: 'https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3',
 };
 
 const TIMINGS: Record<number, any> = {

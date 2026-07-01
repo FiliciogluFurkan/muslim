@@ -7,27 +7,45 @@ export type Palette = {
   muted: string;
   soft: string;
   card: string;
+  elevated: string;
   input: string;
+  border: string;
   accent: string;
-};
-const lightPalette = {
-  bg: '#EEF3EF',     // soft yeşilimsi açık arka plan (beyaz değil!)
-  fg: '#1E2420',
-  muted: '#7A847C',
-  soft: '#D6DED6',
-  card: '#FFFFFF',
-  input: '#F4F7F4',
-  accent: '#6F8F7A',
+  accentSoft: string;
+  gold: string;
+  goldSoft: string;
 };
 
-const darkPalette = {
-  bg: '#1B1F1C',     // siyah değil, koyu yeşilimsi gri
-  fg: '#E8EEE9',
-  muted: '#9AA49C',
-  soft: '#2F3631',
-  card: '#242A25',
-  input: '#2B322C',
-  accent: '#7FAF95',
+// Açık tema — canlı zümrüt + sıcak altın, güçlü metin kontrastı.
+const lightPalette: Palette = {
+  bg: '#EAEFE9',        // sakin adaçayı arka plan
+  fg: '#0E1A13',        // neredeyse siyah koyu yeşil (yüksek kontrast)
+  muted: '#516155',     // koyulaştırılmış ikincil metin
+  soft: '#D3DCD4',      // ayraç / kenarlık
+  card: '#FFFFFF',
+  elevated: '#FFFFFF',
+  input: '#E7ECE7',
+  border: '#DCE4DD',
+  accent: '#0E7A57',    // canlı zümrüt
+  accentSoft: 'rgba(14,122,87,0.12)',
+  gold: '#B67C1E',      // derin altın (ikincil vurgu)
+  goldSoft: 'rgba(182,124,30,0.14)',
+};
+
+// Koyu tema — derin yeşil-siyah, parlak nane-zümrüt + altın.
+const darkPalette: Palette = {
+  bg: '#0E1512',
+  fg: '#E9F1EB',
+  muted: '#8FA096',
+  soft: '#28332C',
+  card: '#161F1A',
+  elevated: '#1C2721',
+  input: '#1E2822',
+  border: '#26322B',
+  accent: '#37D9A0',    // parlak nane-zümrüt
+  accentSoft: 'rgba(55,217,160,0.14)',
+  gold: '#E6B860',      // sıcak altın
+  goldSoft: 'rgba(230,184,96,0.15)',
 };
 
 export function useTheme(): { isDark: boolean; palette: Palette } {
