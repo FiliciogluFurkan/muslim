@@ -5,12 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, {
+  Easing,
   FadeInDown,
   Extrapolation,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { useTodayContent } from '../../hooks/useTodayContent';
@@ -70,23 +72,26 @@ function LiveHeaderSub({
   if (!hijri && !ready) return null;
 
   return (
-    <Animated.Text
-      style={[styles.greetingSub, { color: muted }, fadeStyle]}
-      numberOfLines={1}
-      onPress={() => router.push('/prayer-times')}
-      suppressHighlighting
-    >
-      {hijri ?? ''}
-      {hijri && ready ? '   ·   ' : ''}
+    <Animated.View style={fadeStyle}>
+      {hijri ? (
+        <Text style={[styles.greetingSub, { color: muted }]} numberOfLines={1}>
+          {hijri}
+        </Text>
+      ) : null}
       {ready && state.next ? (
-        <>
+        <Text
+          style={[styles.subCountdownLine, { color: accent }]}
+          numberOfLines={1}
+          onPress={() => router.push('/prayer-times')}
+          suppressHighlighting
+        >
           {state.next.name} vaktine{' '}
-          <Text style={[styles.subCountdown, { color: accent }]}>
+          <Text style={styles.subCountdown}>
             {formatCountdown(state.next.time.getTime() - now)}
           </Text>
-        </>
+        </Text>
       ) : null}
-    </Animated.Text>
+    </Animated.View>
   );
 }
 
@@ -250,6 +255,35 @@ function PrayerHeroCard({
 
 /* ─── Günün vakit şeridi ──────────────────────────── */
 
+/** Şeridin altında günün neresinde olduğumuzu gösteren ince çizgi. */
+function DayProgress({
+  progress,
+  trackColor,
+  fillColor,
+}: {
+  progress: number;
+  trackColor: string;
+  fillColor: string;
+}) {
+  const [trackW, setTrackW] = useState(0);
+  const p = useSharedValue(0);
+
+  useEffect(() => {
+    p.value = withTiming(progress, { duration: 900, easing: Easing.out(Easing.cubic) });
+  }, [progress]);
+
+  const fillStyle = useAnimatedStyle(() => ({ width: p.value * trackW }));
+
+  return (
+    <View
+      style={[styles.stripTrack, { backgroundColor: trackColor }]}
+      onLayout={(e) => setTrackW(e.nativeEvent.layout.width)}
+    >
+      <Animated.View style={[styles.stripFill, { backgroundColor: fillColor }, fillStyle]} />
+    </View>
+  );
+}
+
 function PrayerStrip({
   state,
   cardBg,
@@ -267,6 +301,12 @@ function PrayerStrip({
 }) {
   if (state.status !== 'ready' || state.slots.length === 0) return null;
   const nowMs = Date.now();
+
+  // Gün ilerlemesi: ilk vakit (İmsak) → son vakit (Yatsı)
+  const firstMs = state.slots[0].time.getTime();
+  const lastMs = state.slots[state.slots.length - 1].time.getTime();
+  const dayProgress =
+    lastMs > firstMs ? Math.min(1, Math.max(0, (nowMs - firstMs) / (lastMs - firstMs))) : 0;
 
   return (
     <View style={[styles.stripCard, { backgroundColor: cardBg, borderColor: border }]}>
@@ -309,6 +349,7 @@ function PrayerStrip({
           );
         })}
       </ScrollView>
+      <DayProgress progress={dayProgress} trackColor={border} fillColor={accent} />
     </View>
   );
 }
@@ -426,9 +467,10 @@ export default function HomeScreen() {
         <StickyPrayerInfo state={prayer} fg={palette.fg} accent={palette.accent} />
         <PressableScale
           onPress={() => router.push('/settings')}
-          style={[styles.stickyIconBtn, { borderColor: palette.soft, backgroundColor: palette.input }]}
+          style={styles.stickyIconBtn}
+          hitSlop={10}
         >
-          <Ionicons name="settings-outline" size={16} color={palette.fg} />
+          <Ionicons name="settings-outline" size={20} color={palette.fg} />
         </PressableScale>
       </Animated.View>
 
@@ -451,11 +493,8 @@ export default function HomeScreen() {
                 fadeStyle={subFade}
               />
             </View>
-            <PressableScale
-              onPress={() => router.push('/settings')}
-              style={[styles.settingsBtn, { borderColor: palette.soft, backgroundColor: palette.card }]}
-            >
-              <Ionicons name="settings-outline" size={18} color={palette.fg} />
+            <PressableScale onPress={() => router.push('/settings')} style={styles.settingsBtn} hitSlop={10}>
+              <Ionicons name="settings-outline" size={24} color={palette.fg} />
             </PressableScale>
           </Animated.View>
         </Animated.View>

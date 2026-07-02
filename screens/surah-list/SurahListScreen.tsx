@@ -1,15 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Dimensions,
-} from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { getAllSurahs, type SurahInfo } from '../../lib/quranData';
@@ -21,8 +15,6 @@ import { PressableScale } from '../../components/PressableScale';
 
 const surahs = getAllSurahs();
 const SURAHS_WITH_VIDEO = [1];
-const { width } = Dimensions.get('window');
-const CARD_SIZE = (width - 16 * 2 - 10) / 2; // 2 kolon, padding + gap
 
 export default function SurahListScreen() {
   const insets = useSafeAreaInsets();
@@ -55,39 +47,35 @@ export default function SurahListScreen() {
       const hasVideo = SURAHS_WITH_VIDEO.includes(item.number);
 
       return (
-        <Animated.View entering={FadeInDown.duration(380).delay(Math.min(index, 12) * 22)}>
+        <Animated.View entering={FadeInDown.duration(360).delay(Math.min(index, 10) * 20)}>
           <PressableScale
-            style={[
-              styles.card,
-              {
-                backgroundColor: palette.card,
-                borderColor: palette.soft,
-                width: CARD_SIZE,
-                height: CARD_SIZE,
-              },
-            ]}
+            scaleTo={0.98}
+            style={[styles.row, { backgroundColor: palette.card, borderColor: palette.border }]}
             onPress={() => handleSurahPress(item.number)}
           >
-            <View style={[styles.numBadge, { backgroundColor: palette.input }]}>
-              <Text style={[styles.num, { color: palette.muted }]}>{item.number}</Text>
+            <View style={[styles.numWrap, { backgroundColor: palette.accentSoft }]}>
+              <Text style={[styles.num, { color: palette.accent }]}>{item.number}</Text>
             </View>
 
-            {hasVideo && (
-              <View style={[styles.videoBadge, { backgroundColor: palette.accent }]}>
-                <Text style={styles.videoBadgeText}>▶</Text>
+            <View style={styles.nameBlock}>
+              <View style={styles.nameLine}>
+                <Text style={[styles.nameTr, { color: palette.fg }]} numberOfLines={1}>
+                  {nameTr}
+                </Text>
+                {hasVideo && (
+                  <View style={[styles.videoBadge, { backgroundColor: palette.accent }]}>
+                    <Ionicons name="play" size={8} color="#FFFFFF" />
+                  </View>
+                )}
               </View>
-            )}
-
-            <Text style={[styles.nameAr, { color: palette.fg }]}>{item.name_arabic}</Text>
-
-            <View style={styles.bottom}>
-              <Text style={[styles.nameTr, { color: palette.fg }]} numberOfLines={1}>
-                {nameTr}
-              </Text>
-              <Text style={[styles.meta, { color: palette.soft }]}>
+              <Text style={[styles.meta, { color: palette.muted }]}>
                 {rev} · {item.verse_count} ayet
               </Text>
             </View>
+
+            <Text style={[styles.nameAr, { color: palette.fg }]} numberOfLines={1}>
+              {item.name_arabic}
+            </Text>
           </PressableScale>
         </Animated.View>
       );
@@ -106,7 +94,7 @@ export default function SurahListScreen() {
         <Text style={[styles.kicker, { color: palette.accent }]}>Kur'an-ı Kerîm</Text>
         <View style={styles.titleRow}>
           <Text style={[styles.title, { color: palette.fg }]}>Sureler</Text>
-          <View style={[styles.countPill, { backgroundColor: `${palette.accent}18` }]}>
+          <View style={[styles.countPill, { backgroundColor: palette.accentSoft }]}>
             <Text style={[styles.countText, { color: palette.accent }]}>
               {filtered.length}/114
             </Text>
@@ -114,7 +102,7 @@ export default function SurahListScreen() {
         </View>
 
         <View style={[styles.searchWrap, { backgroundColor: palette.input }]}>
-          <Text style={[styles.searchIcon, { color: palette.muted }]}>⌕</Text>
+          <Ionicons name="search-outline" size={17} color={palette.muted} style={styles.searchIcon} />
           <TextInput
             style={[styles.search, { color: palette.fg }]}
             placeholder="Sure ara..."
@@ -130,12 +118,10 @@ export default function SurahListScreen() {
         data={filtered}
         keyExtractor={(s) => String(s.number)}
         renderItem={renderItem}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
         contentContainerStyle={{
           paddingBottom: tabScrollPadding(insets.bottom),
           paddingHorizontal: 16,
-          gap: 10,
+          gap: 8,
         }}
         keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}
@@ -180,11 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingHorizontal: 14,
   },
-  searchIcon: {
-    fontSize: 20,
-    marginRight: 8,
-    fontWeight: '700',
-  },
+  searchIcon: { marginRight: 8 },
   search: {
     flex: 1,
     fontFamily: FONT.medium,
@@ -192,44 +174,45 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  row: { gap: 10 },
-
-  card: {
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 12,
-    justifyContent: 'space-between',
+  /* ─── Sure satırı ─────────────────────────────── */
+  row: {
+    flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
+    gap: 13,
+    borderRadius: 16,
+    borderWidth: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
-  numBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
-  },
-  num: { fontFamily: FONT.bold, fontSize: 12 },
-
-  videoBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+  numWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  videoBadgeText: { color: '#fff', fontSize: 9 },
-
-  nameAr: {
-    fontFamily: 'Amiri_400Regular',
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 4,
+  num: {
+    fontFamily: FONT.extrabold,
+    fontSize: 14,
+    fontVariant: ['tabular-nums'],
   },
-
-  bottom: { width: '100%', gap: 2, alignItems: 'center' },
-  nameTr: { fontFamily: FONT.bold, fontSize: 14, textAlign: 'center' },
-  meta: { fontFamily: FONT.medium, fontSize: 11, textAlign: 'center' },
+  nameBlock: { flex: 1, gap: 2 },
+  nameLine: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  nameTr: { fontFamily: FONT.bold, fontSize: 15.5, letterSpacing: -0.2, flexShrink: 1 },
+  meta: { fontFamily: FONT.medium, fontSize: 11.5 },
+  videoBadge: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 1,
+  },
+  nameAr: {
+    fontFamily: FONT.arabic,
+    fontSize: 20,
+    lineHeight: 34,
+    textAlign: 'right',
+    maxWidth: 130,
+  },
 });

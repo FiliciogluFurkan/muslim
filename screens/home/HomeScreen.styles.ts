@@ -36,14 +36,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.3,
     fontVariant: ['tabular-nums'],
   },
-  stickyIconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  stickyIconBtn: { padding: 4 },
 
   /* ─── Başlık ─────────────────────────────────── */
   titleRow: {
@@ -63,16 +56,15 @@ export const styles = StyleSheet.create({
   },
   greetingTitle: { fontFamily: FONT.extrabold, fontSize: 23, letterSpacing: -0.5 },
   greetingSub: { fontFamily: FONT.medium, fontSize: 13, lineHeight: 18, marginTop: 5 },
-  subCountdown: { fontFamily: FONT.bold, fontVariant: ['tabular-nums'] },
-
-  settingsBtn: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  subCountdownLine: {
+    fontFamily: FONT.semibold,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 3,
   },
+  subCountdown: { fontFamily: FONT.extrabold, fontVariant: ['tabular-nums'], letterSpacing: 0.2 },
+
+  settingsBtn: { padding: 4 },
 
   /* ─── Bölüm başlığı ───────────────────────────── */
   sectionRow: {
@@ -306,6 +298,15 @@ export const styles = StyleSheet.create({
   stripName: { fontFamily: FONT.semibold, fontSize: 10.5, marginBottom: 4, letterSpacing: 0.3 },
   stripTime: { fontFamily: FONT.bold, fontSize: 13.5, fontVariant: ['tabular-nums'] },
   stripNextDot: { width: 4, height: 4, borderRadius: 2, marginTop: 5 },
+  stripTrack: {
+    height: 3,
+    borderRadius: 999,
+    marginHorizontal: 14,
+    marginTop: 4,
+    marginBottom: 8,
+    overflow: 'hidden',
+  },
+  stripFill: { height: 3, borderRadius: 999 },
 
   /* ─── Hızlı erişim ────────────────────────────── */
   navGrid: { flexDirection: 'row', gap: 10, marginBottom: 22 },
