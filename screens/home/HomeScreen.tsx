@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { LayoutChangeEvent, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -255,13 +255,13 @@ function PrayerHeroCard({
 
 /* ─── Günün vakit şeridi ──────────────────────────── */
 
-/** Şeridin altında günün neresinde olduğumuzu gösteren ince çizgi. */
+/** Şeridin altında, o an içinde bulunduğumuz vaktin tam altına denk gelen ince çizgi. */
 function DayProgress({
-  progress,
+  fraction,
   trackColor,
   fillColor,
 }: {
-  progress: number;
+  fraction: number;
   trackColor: string;
   fillColor: string;
 }) {
@@ -269,8 +269,8 @@ function DayProgress({
   const p = useSharedValue(0);
 
   useEffect(() => {
-    p.value = withTiming(progress, { duration: 900, easing: Easing.out(Easing.cubic) });
-  }, [progress]);
+    p.value = withTiming(fraction, { duration: 500, easing: Easing.out(Easing.cubic) });
+  }, [fraction]);
 
   const fillStyle = useAnimatedStyle(() => ({ width: p.value * trackW }));
 
@@ -299,21 +299,62 @@ function PrayerStrip({
   fg: string;
   accent: string;
 }) {
-  if (state.status !== 'ready' || state.slots.length === 0) return null;
+  const scrollRef = useRef<ScrollView>(null);
+  const itemLayouts = useRef<Record<string, { x: number; width: number }>>({});
+  const lastCenteredRef = useRef<string | null>(null);
+  const [viewportW, setViewportW] = useState(0);
+  const [contentW, setContentW] = useState(0);
+  const [layoutTick, bumpLayout] = useState(0);
+  const [visibleX, setVisibleX] = useState<number | null>(null);
+
+  const ready = state.status === 'ready' && state.slots.length > 0;
+  const currentName = state.next?.name ?? state.slots[state.slots.length - 1]?.name;
+
+  const handleItemLayout = useCallback(
+    (name: string) => (e: LayoutChangeEvent) => {
+      itemLayouts.current[name] = {
+        x: e.nativeEvent.layout.x,
+        width: e.nativeEvent.layout.width,
+      };
+      bumpLayout((v) => v + 1);
+    },
+    [],
+  );
+
+  // Şu an hangi vakitteysek şeridi o karta ortalar ve ilerleme çizgisini
+  // tam o kartın altına hizalar.
+  useEffect(() => {
+    if (!ready || !viewportW || !contentW || !currentName) return;
+    const layout = itemLayouts.current[currentName];
+    if (!layout) return;
+    if (lastCenteredRef.current === currentName) return;
+
+    const isFirstRun = lastCenteredRef.current === null;
+    lastCenteredRef.current = currentName;
+
+    const centerX = layout.x + layout.width / 2;
+    const maxScrollX = Math.max(0, contentW - viewportW);
+    const targetX = Math.min(maxScrollX, Math.max(0, centerX - viewportW / 2));
+
+    scrollRef.current?.scrollTo({ x: targetX, animated: !isFirstRun });
+    setVisibleX(centerX - targetX);
+  }, [ready, viewportW, contentW, currentName, layoutTick]);
+
+  if (!ready) return null;
   const nowMs = Date.now();
 
-  // Gün ilerlemesi: ilk vakit (İmsak) → son vakit (Yatsı)
-  const firstMs = state.slots[0].time.getTime();
-  const lastMs = state.slots[state.slots.length - 1].time.getTime();
-  const dayProgress =
-    lastMs > firstMs ? Math.min(1, Math.max(0, (nowMs - firstMs) / (lastMs - firstMs))) : 0;
+  const fraction =
+    visibleX !== null && viewportW ? Math.min(1, Math.max(0, visibleX / viewportW)) : 0;
 
   return (
     <View style={[styles.stripCard, { backgroundColor: cardBg, borderColor: border }]}>
       <ScrollView
+        ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.stripContent}
+        onLayout={(e) => setViewportW(e.nativeEvent.layout.width)}
+        onContentSizeChange={(w) => setContentW(w)}
       >
         {state.slots.map((slot) => {
           const isNext = state.next?.name === slot.name;
@@ -321,6 +362,7 @@ function PrayerStrip({
           return (
             <View
               key={slot.name}
+              onLayout={handleItemLayout(slot.name)}
               style={[styles.stripItem, isNext && { backgroundColor: `${accent}17` }]}
             >
               <Text
@@ -349,7 +391,7 @@ function PrayerStrip({
           );
         })}
       </ScrollView>
-      <DayProgress progress={dayProgress} trackColor={border} fillColor={accent} />
+      <DayProgress fraction={fraction} trackColor={border} fillColor={accent} />
     </View>
   );
 }
@@ -513,9 +555,6 @@ export default function HomeScreen() {
                 <View style={[styles.featureKickerDot, { backgroundColor: palette.accent }]} />
                 <Text style={[styles.featureKicker, { color: palette.accent }]}>Günün Ayeti</Text>
               </View>
-              <View style={[styles.featureBadge, { backgroundColor: palette.accentSoft }]}>
-                <Text style={[styles.featureBadgeText, { color: palette.accent }]}>{surahName}</Text>
-              </View>
             </View>
 
             <Text style={[styles.arabic, { color: palette.fg }]}>{content.verse.arabic}</Text>
@@ -628,12 +667,15 @@ export default function HomeScreen() {
                   { backgroundColor: palette.card, borderColor: palette.border },
                 ]}
               >
-                <View style={[styles.navCardIconWrap, { backgroundColor: `${item.tint}17` }]}>
-                  <Ionicons name={item.icon} size={17} color={item.tint} />
+                <View style={styles.navCardTop}>
+                  <View style={[styles.navCardIconWrap, { backgroundColor: `${item.tint}17` }]}>
+                    <Ionicons name={item.icon} size={19} color={item.tint} />
+                  </View>
+                  <Ionicons name="chevron-forward" size={13} color={palette.soft} />
                 </View>
-                <View>
-                  <Text style={[styles.navCardLabel, { color: palette.fg }]}>{item.label}</Text>
-                  <Text style={[styles.navCardDesc, { color: palette.muted }]}>{item.desc}</Text>
+                <Text style={[styles.navCardLabel, { color: palette.fg }]}>{item.label}</Text>
+                <View style={[styles.navCardTag, { backgroundColor: `${item.tint}14` }]}>
+                  <Text style={[styles.navCardTagText, { color: item.tint }]}>{item.desc}</Text>
                 </View>
               </PressableScale>
             ))}

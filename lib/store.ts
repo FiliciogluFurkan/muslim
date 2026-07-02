@@ -52,7 +52,7 @@ export const useMushafStore = create<MushafState>()(
       fontSize: 28,
       setFontSize: (size) => set({ fontSize: size }),
 
-      themeMode: 'system',
+      themeMode: 'light',
       setThemeMode: (mode) => set({ themeMode: mode }),
 
       showTranslation: true,

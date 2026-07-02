@@ -61,8 +61,8 @@ function ThemedStack() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: 'fade_from_bottom',
-        animationDuration: 200,
+        animation: 'fade',
+        animationDuration: 280,
         contentStyle: { backgroundColor: palette.bg },
         gestureEnabled: true,
       }}

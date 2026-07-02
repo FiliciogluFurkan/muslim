@@ -1,4 +1,3 @@
-import { useColorScheme } from 'react-native';
 import { useMushafStore } from '../lib/store';
 
 export type Palette = {
@@ -49,15 +48,10 @@ const darkPalette: Palette = {
 };
 
 export function useTheme(): { isDark: boolean; palette: Palette } {
-  const systemScheme = useColorScheme();
   const themeMode = useMushafStore((s) => s.themeMode);
-
-  let isDark: boolean;
-  if (themeMode === 'system') {
-    isDark = systemScheme === 'dark' || systemScheme == null;
-  } else {
-    isDark = themeMode === 'dark';
-  }
+  // 'system' seçeneği ayarlardan kaldırıldı; eski kayıtlı değerler için
+  // güvenli varsayılan olarak aydınlığa düşer.
+  const isDark = themeMode === 'dark';
 
   return { isDark, palette: isDark ? darkPalette : lightPalette };
 }

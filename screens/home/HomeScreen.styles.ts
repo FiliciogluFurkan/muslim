@@ -118,13 +118,6 @@ export const styles = StyleSheet.create({
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
-  featureBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: RADIUS.pill,
-  },
-  featureBadgeText: { fontFamily: FONT.bold, fontSize: 11.5 },
-
   arabic: { fontFamily: FONT.arabic, fontSize: 23, lineHeight: 44, textAlign: 'right' },
 
   accentRule: {
@@ -231,7 +224,7 @@ export const styles = StyleSheet.create({
     lineHeight: 30,
     letterSpacing: -0.5,
   },
-  prayerHeroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 2 },
+  prayerHeroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 7 },
   timePill: {
     backgroundColor: HERO.onDark,
     paddingHorizontal: 13,
@@ -312,23 +305,33 @@ export const styles = StyleSheet.create({
   navGrid: { flexDirection: 'row', gap: 10, marginBottom: 22 },
   navCard: {
     flex: 1,
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
-    paddingVertical: 14,
-    paddingHorizontal: 13,
-    minHeight: 94,
+    padding: 14,
+    minHeight: 112,
     justifyContent: 'space-between',
   },
+  navCardTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
   navCardIconWrap: {
-    width: 34,
-    height: 34,
-    borderRadius: 11,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
   },
-  navCardLabel: { fontFamily: FONT.bold, fontSize: 14, marginBottom: 2, letterSpacing: -0.2 },
-  navCardDesc: { fontFamily: FONT.medium, fontSize: 11, lineHeight: 14 },
+  navCardLabel: { fontFamily: FONT.bold, fontSize: 14.5, marginTop: 12, letterSpacing: -0.2 },
+  navCardTag: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3.5,
+    borderRadius: RADIUS.pill,
+    marginTop: 6,
+  },
+  navCardTagText: { fontFamily: FONT.bold, fontSize: 10.5, letterSpacing: 0.1 },
 
   /* ─── Alt imza ────────────────────────────────── */
   footerMark: {

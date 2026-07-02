@@ -12,9 +12,8 @@ import { PressableScale } from '../components/PressableScale';
 const FONT_SIZES = [20, 24, 28, 32, 36, 40];
 
 const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
-  { value: 'system', label: 'Sistem' },
-  { value: 'dark', label: 'Karanlık' },
   { value: 'light', label: 'Aydınlık' },
+  { value: 'dark', label: 'Karanlık' },
 ];
 
 const TRANSLATION_OPTIONS: { value: TranslationId; label: string }[] = [

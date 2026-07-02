@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Modal,
@@ -125,8 +125,15 @@ export default function SurahReaderScreen() {
 
   const goTo = (n: number) => {
     const prefix = mode === 'juz' ? 'juz_' : mode === 'page' ? 'page_' : '';
-    router.replace({ pathname: '/surah/[id]', params: { id: `${prefix}${n}` } });
+    // Aynı ekranda kalıp sadece parametreyi güncelliyoruz — replace() native-stack'te
+    // animasyonsuz "flaş" gibi bir geçişe yol açıyordu.
+    router.setParams({ id: `${prefix}${n}` });
   };
+
+  // İçerik parametreyle değiştiği için FlatList'i başa sar (aksi halde eski kaydırma konumunda kalır).
+  useEffect(() => {
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+  }, [mode, num]);
 
   // Show besmele for surah mode (except surah 1 and 9)
   const showBesmele = mode === 'surah' && num !== 1 && num !== 9;
@@ -336,10 +343,7 @@ export default function SurahReaderScreen() {
                   key={s.number}
                   onPress={() => {
                     setShowSurahPicker(false);
-                    router.replace({
-                      pathname: '/surah/[id]',
-                      params: { id: String(s.number) },
-                    });
+                    router.setParams({ id: String(s.number) });
                   }}
                   style={({ pressed }) => [
                     styles.surahPickerRow,

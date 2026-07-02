@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     lineHeight: 30,
     letterSpacing: -0.5,
   },
-  heroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 2 },
+  heroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 7 },
   timePill: {
     backgroundColor: HERO.onDark,
     paddingHorizontal: 13,
