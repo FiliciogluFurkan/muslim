@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Share, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,18 +23,10 @@ import { getTranslation } from '../../lib/quranData';
 import { formatTime } from '../../lib/prayerTimes';
 import { tabScrollPadding } from '../../lib/layout';
 import { PressableScale } from '../../components/PressableScale';
-import { CelestialBadge } from '../../components/CelestialBadge';
 import { CityPicker } from '../../components/CityPicker';
 import { styles, HERO, TEAL } from './HomeScreen.styles';
 
 /* ─── Yardımcılar ─────────────────────────────────── */
-
-function getGreeting(hour: number): string {
-  if (hour >= 4 && hour < 11) return 'Günaydın';
-  if (hour >= 11 && hour < 17) return 'Hayırlı günler';
-  if (hour >= 17 && hour < 21) return 'Hayırlı akşamlar';
-  return 'Hayırlı geceler';
-}
 
 function formatCountdown(ms: number): string {
   if (ms <= 0) return '00:00:00';
@@ -45,41 +37,84 @@ function formatCountdown(ms: number): string {
   return [h, m, s].map((v) => String(v).padStart(2, '0')).join(':');
 }
 
-/* ─── Başlık altı canlı "sonraki vakit" rozeti ────── */
-
-function NextPrayerChip({
-  state,
-  accent,
-  accentSoft,
-}: {
-  state: PrayerTimesState;
-  accent: string;
-  accentSoft: string;
-}) {
+/** Saniyede bir güncellenen saat — geri sayım gösteren parçalar için. */
+function useNowTicker(active: boolean): number {
   const [now, setNow] = useState(() => Date.now());
-  const ready = state.status === 'ready' && !!state.next;
 
   useEffect(() => {
-    if (!ready) return;
+    if (!active) return;
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
-  }, [ready, state.next]);
+  }, [active]);
 
-  if (!ready || !state.next) return null;
+  return now;
+}
+
+/* ─── Başlık alt satırı: hicri tarih + canlı geri sayım ── */
+
+function LiveHeaderSub({
+  state,
+  muted,
+  accent,
+  fadeStyle,
+}: {
+  state: PrayerTimesState;
+  muted: string;
+  accent: string;
+  fadeStyle: object;
+}) {
+  const ready = state.status === 'ready' && !!state.next;
+  const now = useNowTicker(ready);
+  const hijri = state.hijriDate;
+
+  if (!hijri && !ready) return null;
 
   return (
-    <Animated.View entering={FadeInDown.duration(420)} style={styles.nextChipRow}>
-      <PressableScale
-        onPress={() => router.push('/prayer-times')}
-        style={[styles.nextChip, { backgroundColor: accentSoft, borderColor: `${accent}2E` }]}
-      >
-        <View style={[styles.nextChipDot, { backgroundColor: accent }]} />
-        <Text style={[styles.nextChipLabel, { color: accent }]}>{state.next.name} vaktine</Text>
-        <Text style={[styles.nextChipTime, { color: accent }]}>
-          {formatCountdown(state.next.time.getTime() - now)}
-        </Text>
-      </PressableScale>
-    </Animated.View>
+    <Animated.Text
+      style={[styles.greetingSub, { color: muted }, fadeStyle]}
+      numberOfLines={1}
+      onPress={() => router.push('/prayer-times')}
+      suppressHighlighting
+    >
+      {hijri ?? ''}
+      {hijri && ready ? '   ·   ' : ''}
+      {ready && state.next ? (
+        <>
+          {state.next.name} vaktine{' '}
+          <Text style={[styles.subCountdown, { color: accent }]}>
+            {formatCountdown(state.next.time.getTime() - now)}
+          </Text>
+        </>
+      ) : null}
+    </Animated.Text>
+  );
+}
+
+/* ─── Yapışkan bar: kaydırınca beliren canlı sayaç ── */
+
+function StickyPrayerInfo({
+  state,
+  fg,
+  accent,
+}: {
+  state: PrayerTimesState;
+  fg: string;
+  accent: string;
+}) {
+  const ready = state.status === 'ready' && !!state.next;
+  const now = useNowTicker(ready);
+
+  if (!ready || !state.next) {
+    return <Text style={[styles.stickyTitle, { color: fg }]}>Furkan</Text>;
+  }
+
+  return (
+    <View style={styles.stickyInfo}>
+      <Text style={[styles.stickyTitle, { color: fg }]}>{state.next.name} vaktine</Text>
+      <Text style={[styles.stickyTime, { color: accent }]}>
+        {formatCountdown(state.next.time.getTime() - now)}
+      </Text>
+    </View>
   );
 }
 
@@ -319,14 +354,11 @@ export default function HomeScreen() {
     transform: [{ translateY: interpolate(scrollY.value, [80, 140], [-10, 0], Extrapolation.CLAMP) }],
   }));
 
-  const hour = useMemo(() => new Date().getHours(), []);
-  const greeting = getGreeting(hour);
   const dateStr = new Date().toLocaleDateString('tr-TR', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
   });
-  const subLine = prayer.hijriDate ? `${dateStr}  ·  ${prayer.hijriDate}` : dateStr;
 
   const openSurah = () =>
     router.push({ pathname: '/surah/[id]', params: { id: content.verse.surah_number } });
@@ -391,7 +423,7 @@ export default function HomeScreen() {
           stickyStyle,
         ]}
       >
-        <Text style={[styles.stickyTitle, { color: palette.fg }]}>{greeting}</Text>
+        <StickyPrayerInfo state={prayer} fg={palette.fg} accent={palette.accent} />
         <PressableScale
           onPress={() => router.push('/settings')}
           style={[styles.stickyIconBtn, { borderColor: palette.soft, backgroundColor: palette.input }]}
@@ -409,13 +441,15 @@ export default function HomeScreen() {
         {/* Başlık */}
         <Animated.View entering={FadeInDown.duration(500)}>
           <Animated.View style={[styles.titleRow, headerShift]}>
-            <CelestialBadge hour={hour} />
             <View style={styles.titleBlock}>
               <Text style={[styles.greetingEyebrow, { color: palette.accent }]}>Selamün Aleyküm</Text>
-              <Text style={[styles.greetingTitle, { color: palette.fg }]}>{greeting}</Text>
-              <Animated.Text style={[styles.greetingSub, { color: palette.muted }, subFade]}>
-                {subLine}
-              </Animated.Text>
+              <Text style={[styles.greetingTitle, { color: palette.fg }]}>{dateStr}</Text>
+              <LiveHeaderSub
+                state={prayer}
+                muted={palette.muted}
+                accent={palette.accent}
+                fadeStyle={subFade}
+              />
             </View>
             <PressableScale
               onPress={() => router.push('/settings')}
@@ -425,9 +459,6 @@ export default function HomeScreen() {
             </PressableScale>
           </Animated.View>
         </Animated.View>
-
-        {/* Canlı sonraki vakit rozeti */}
-        <NextPrayerChip state={prayer} accent={palette.accent} accentSoft={palette.accentSoft} />
 
         {/* ── Günün Ayeti ── */}
         <Animated.View entering={FadeInDown.duration(520).delay(80)}>
@@ -460,17 +491,16 @@ export default function HomeScreen() {
               </Text>
               <View style={styles.footerActions}>
                 <PressableScale
-                  style={[styles.iconBtn, { backgroundColor: palette.input, borderColor: palette.border }]}
+                  style={[styles.textBtn, { backgroundColor: palette.input }]}
                   onPress={shareVerse}
                 >
-                  <Ionicons name="share-outline" size={16} color={palette.muted} />
+                  <Text style={[styles.textBtnLabel, { color: palette.muted }]}>Paylaş</Text>
                 </PressableScale>
                 <PressableScale
                   style={[styles.textBtn, { backgroundColor: palette.accentSoft }]}
                   onPress={openSurah}
                 >
                   <Text style={[styles.textBtnLabel, { color: palette.accent }]}>Sûreyi Oku</Text>
-                  <Ionicons name="arrow-forward" size={14} color={palette.accent} />
                 </PressableScale>
               </View>
             </View>
@@ -509,7 +539,6 @@ export default function HomeScreen() {
                   onPress={shareHadith}
                 >
                   <Text style={[styles.textBtnLabel, { color: palette.gold }]}>Paylaş</Text>
-                  <Ionicons name="share-outline" size={14} color={palette.gold} />
                 </PressableScale>
               </View>
             </View>

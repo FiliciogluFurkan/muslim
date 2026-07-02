@@ -29,6 +29,13 @@ export const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   stickyTitle: { fontFamily: FONT.extrabold, fontSize: 16, letterSpacing: -0.3 },
+  stickyInfo: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
+  stickyTime: {
+    fontFamily: FONT.extrabold,
+    fontSize: 15.5,
+    letterSpacing: 0.3,
+    fontVariant: ['tabular-nums'],
+  },
   stickyIconBtn: {
     width: 36,
     height: 36,
@@ -44,7 +51,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
     paddingTop: 6,
-    paddingBottom: 14,
+    paddingBottom: 18,
   },
   titleBlock: { flex: 1 },
   greetingEyebrow: {
@@ -54,29 +61,9 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 4,
   },
-  greetingTitle: { fontFamily: FONT.extrabold, fontSize: 25, letterSpacing: -0.6 },
-  greetingSub: { fontFamily: FONT.medium, fontSize: 13, lineHeight: 18, marginTop: 4 },
-
-  /* Başlığın hemen altında canlı "sonraki vakit" rozeti */
-  nextChipRow: { paddingBottom: 18 },
-  nextChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: 8,
-    paddingHorizontal: 13,
-    paddingVertical: 8,
-    borderRadius: RADIUS.pill,
-    borderWidth: 1,
-  },
-  nextChipDot: { width: 6, height: 6, borderRadius: 3 },
-  nextChipLabel: { fontFamily: FONT.bold, fontSize: 12.5 },
-  nextChipTime: {
-    fontFamily: FONT.extrabold,
-    fontSize: 12.5,
-    letterSpacing: 0.3,
-    fontVariant: ['tabular-nums'],
-  },
+  greetingTitle: { fontFamily: FONT.extrabold, fontSize: 23, letterSpacing: -0.5 },
+  greetingSub: { fontFamily: FONT.medium, fontSize: 13, lineHeight: 18, marginTop: 5 },
+  subCountdown: { fontFamily: FONT.bold, fontVariant: ['tabular-nums'] },
 
   settingsBtn: {
     width: 42,
@@ -175,14 +162,6 @@ export const styles = StyleSheet.create({
     borderRadius: RADIUS.control,
   },
   textBtnLabel: { fontFamily: FONT.bold, fontSize: 13 },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: RADIUS.control,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-  },
 
   /* ─── Hadis (sol altın çizgili alıntı) ────────── */
   quoteRow: { flexDirection: 'row', gap: 14 },
