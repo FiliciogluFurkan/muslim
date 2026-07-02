@@ -1,336 +1,206 @@
 import { StyleSheet } from 'react-native';
 import { FONT } from '../../lib/typography';
+import { HERO } from '../../lib/heroTheme';
 
-export const THEME = {
-  bg: '#171412',
-  surface: '#211D1A',
-  surfaceSoft: '#2A2521',
-  border: '#3A332D',
-  text: '#F6ECDD',
-  textSoft: '#DCC8A9',
-  textMuted: '#A78F74',
-  accent: '#E0B565',
-  accentSoft: 'rgba(224,181,101,0.14)',
-  warning: '#E7A24A',
-  danger: '#D86455',
-};
-
+/**
+ * Vakitler ekranı — ana ekranla aynı dili konuşur:
+ * tema uyumlu yüzeyler + zümrüt hero. Renkler TSX'te paletten verilir;
+ * burada yalnızca yerleşim ve tipografi durur.
+ */
 export const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: THEME.bg,
-  },
+  root: { flex: 1 },
+  scroll: { paddingHorizontal: 20 },
 
-  scroll: {
-    paddingHorizontal: 20,
-  },
+  /* ─── Başlık ─────────────────────────────────── */
+  header: { paddingTop: 6, marginBottom: 14 },
+  headerTitle: { fontFamily: FONT.extrabold, fontSize: 25, letterSpacing: -0.6 },
+  headerSub: { fontFamily: FONT.medium, fontSize: 13, lineHeight: 18, marginTop: 4 },
 
-  loadingText: {
-    fontFamily: FONT.medium,
-    color: THEME.textMuted,
-    textAlign: 'center',
-    marginTop: 80,
-    fontSize: 14,
+  /* ─── Zümrüt hero: dev geri sayım ─────────────── */
+  hero: {
+    borderRadius: 22,
+    padding: 18,
+    backgroundColor: HERO.bg,
+    overflow: 'hidden',
+    marginBottom: 12,
+    shadowColor: '#08251A',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.28,
+    shadowRadius: 24,
+    elevation: 8,
   },
-
-  header: {
-    paddingTop: 8,
-    marginBottom: 20,
+  heroGlowTop: {
+    position: 'absolute',
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    top: -110,
+    right: -70,
+    backgroundColor: 'rgba(124,227,184,0.10)',
   },
-  headerTopRow: {
+  heroGlowBottom: {
+    position: 'absolute',
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    bottom: -170,
+    left: -110,
+    backgroundColor: 'rgba(10,47,35,0.9)',
+  },
+  heroTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  cityBtn: {
+  heroLabelWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  heroLabelDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: HERO.mint },
+  heroLabel: {
+    fontFamily: FONT.extrabold,
+    color: HERO.mint,
+    fontSize: 10.5,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
+  cityPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: THEME.surface,
+    backgroundColor: HERO.pill,
     borderWidth: 1,
-    borderColor: THEME.border,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 999,
-  },
-  cityBtnIcon: { fontSize: 12 },
-  cityBtnText: { fontFamily: FONT.semibold, color: THEME.text, fontSize: 13, maxWidth: 140 },
-  cityBtnCaret: { color: THEME.textMuted, fontSize: 9 },
-
-  emptyWrap: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 36,
-    gap: 8,
-  },
-  emptyEmoji: { fontSize: 60, marginBottom: 12 },
-  emptyTitle: { fontFamily: FONT.extrabold, color: THEME.text, fontSize: 26, letterSpacing: -0.5 },
-  emptyText: {
-    fontFamily: FONT.medium,
-    color: THEME.textMuted,
-    fontSize: 14,
-    lineHeight: 21,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  emptyPrimary: {
-    backgroundColor: THEME.accent,
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 14,
-    marginBottom: 4,
-  },
-  emptyPrimaryText: { fontFamily: FONT.bold, color: '#20160A', fontSize: 15 },
-  emptyGhost: { paddingHorizontal: 24, paddingVertical: 12 },
-  emptyGhostText: { fontFamily: FONT.bold, color: THEME.accent, fontSize: 14 },
-
-  headerEyebrow: {
-    fontFamily: FONT.bold,
-    color: THEME.textMuted,
-    fontSize: 11,
-    letterSpacing: 2.4,
-    textTransform: 'uppercase',
-    marginBottom: 6,
-  },
-  headerTitle: {
-    fontFamily: FONT.extrabold,
-    color: THEME.text,
-    fontSize: 30,
-    letterSpacing: -0.6,
-  },
-  headerDate: {
-    fontFamily: FONT.medium,
-    color: THEME.textSoft,
-    fontSize: 13,
-    marginTop: 6,
-    lineHeight: 19,
-  },
-
-  heroCard: {
-    backgroundColor: THEME.surface,
-    borderRadius: 28,
-    padding: 22,
-    borderWidth: 1,
-    borderColor: THEME.border,
-    marginBottom: 18,
-  },
-  heroHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  heroLabel: {
-    fontFamily: FONT.bold,
-    color: THEME.textMuted,
-    fontSize: 11,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-  },
-  heroBadge: {
-    backgroundColor: THEME.accentSoft,
-    paddingHorizontal: 10,
+    borderColor: HERO.pillBorder,
+    paddingHorizontal: 11,
     paddingVertical: 6,
     borderRadius: 999,
   },
-  heroBadgeText: {
-    fontFamily: FONT.bold,
-    color: THEME.accent,
-    fontSize: 10,
-    letterSpacing: 0.8,
-  },
-  heroPrayerRow: {
+  cityPillText: { fontFamily: FONT.semibold, color: HERO.onDark, fontSize: 12, maxWidth: 120 },
+
+  heroMain: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
+    alignItems: 'flex-end',
+    marginBottom: 14,
   },
-  heroPrayerName: {
+  heroName: {
     fontFamily: FONT.extrabold,
-    color: THEME.text,
-    fontSize: 28,
+    color: HERO.onDark,
+    fontSize: 27,
+    lineHeight: 30,
     letterSpacing: -0.5,
   },
-  heroPrayerArabic: {
-    color: THEME.textSoft,
-    fontSize: 16,
-    marginTop: 4,
-    fontFamily: 'Amiri_400Regular',
-  },
-  heroTimePill: {
-    backgroundColor: THEME.surfaceSoft,
-    borderRadius: 999,
-    paddingHorizontal: 12,
+  heroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 2 },
+  timePill: {
+    backgroundColor: HERO.onDark,
+    paddingHorizontal: 13,
     paddingVertical: 8,
+    borderRadius: 13,
   },
-  heroTimePillText: {
-    fontFamily: FONT.bold,
-    color: THEME.text,
-    fontSize: 14,
-    letterSpacing: 0.2,
-  },
-  heroCountdown: {
+  timePillText: {
     fontFamily: FONT.extrabold,
-    fontSize: 54,
-    lineHeight: 62,
-    marginBottom: 4,
+    color: HERO.bgAlt,
+    fontSize: 17,
+    letterSpacing: 0.4,
+    fontVariant: ['tabular-nums'],
+  },
+
+  heroDone: {
+    fontFamily: FONT.medium,
+    color: HERO.onDarkSoft,
+    fontSize: 13.5,
+    lineHeight: 20,
+    marginTop: 4,
+  },
+
+  countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 9, marginBottom: 14 },
+  countdown: {
+    fontFamily: FONT.extrabold,
+    color: HERO.onDark,
+    fontSize: 42,
+    lineHeight: 48,
     letterSpacing: 1,
     fontVariant: ['tabular-nums'],
   },
-  heroSub: {
-    fontFamily: FONT.medium,
-    color: THEME.textMuted,
-    fontSize: 12,
-    marginBottom: 18,
-  },
-  heroProgressTrack: {
-    height: 6,
-    backgroundColor: THEME.surfaceSoft,
+  countdownLabel: { fontFamily: FONT.semibold, color: HERO.onDarkSoft, fontSize: 13 },
+
+  progressTrack: {
+    height: 5,
     borderRadius: 999,
+    backgroundColor: HERO.track,
     overflow: 'hidden',
   },
-  heroProgressFill: {
-    height: 6,
-    borderRadius: 999,
-  },
+  progressFill: { height: 5, borderRadius: 999, backgroundColor: HERO.mint },
 
+  /* ─── Kerahat uyarısı ─────────────────────────── */
   alertCard: {
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 22,
-  },
-  alertCardWarn: {
-    backgroundColor: '#2C2218',
-    borderColor: '#5E4731',
-  },
-  alertCardDanger: {
-    backgroundColor: '#2A1717',
-    borderColor: '#5A302B',
-  },
-  alertDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 999,
-    flexShrink: 0,
-  },
-  alertText: {
-    fontFamily: FONT.medium,
-    fontSize: 12,
-    lineHeight: 18,
-    flex: 1,
-  },
-
-  sectionTitle: {
-    fontFamily: FONT.extrabold,
-    color: THEME.textSoft,
-    fontSize: 12,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 13,
     marginBottom: 12,
   },
+  alertDot: { width: 8, height: 8, borderRadius: 4, flexShrink: 0 },
+  alertText: { fontFamily: FONT.medium, fontSize: 12.5, lineHeight: 18, flex: 1 },
 
+  /* ─── Bölüm başlığı ───────────────────────────── */
+  sectionLabel: {
+    fontFamily: FONT.extrabold,
+    fontSize: 11.5,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    marginTop: 12,
+    marginBottom: 10,
+    paddingHorizontal: 2,
+  },
+
+  /* ─── Vakit zaman çizelgesi ───────────────────── */
   listCard: {
-    backgroundColor: THEME.surface,
-    borderRadius: 24,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: THEME.border,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
-
-  prayerRow: {
-    paddingVertical: 14,
+  timelineRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  prayerRowBorder: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: THEME.border,
-  },
-
-  prayerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  prayerIconWrap: {
-    width: 40,
-    height: 40,
     borderRadius: 14,
-    backgroundColor: THEME.surfaceSoft,
+    paddingRight: 12,
+  },
+  railWrap: {
+    width: 30,
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  prayerIconWrapActive: {
-    backgroundColor: '#34291F',
-  },
-  prayerIcon: {
-    fontSize: 17,
-  },
+  railTop: { position: 'absolute', top: 0, height: '50%', width: 2, borderRadius: 1 },
+  railBottom: { position: 'absolute', bottom: 0, height: '50%', width: 2, borderRadius: 1 },
+  dot: { width: 8, height: 8, borderRadius: 4 },
+  dotHollow: { width: 9, height: 9, borderRadius: 4.5, borderWidth: 1.5, backgroundColor: 'transparent' },
+  nextDotWrap: { width: 22, height: 22, alignItems: 'center', justifyContent: 'center' },
+  nextDotRing: { position: 'absolute', width: 22, height: 22, borderRadius: 11, borderWidth: 1.5 },
+  nextDotCore: { width: 9, height: 9, borderRadius: 4.5 },
 
-  prayerRight: {
-    alignItems: 'flex-end',
-    gap: 6,
+  rowInner: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    marginLeft: 4,
   },
+  prayerName: { fontFamily: FONT.semibold, fontSize: 15 },
+  prayerNameNext: { fontFamily: FONT.extrabold, fontSize: 15, letterSpacing: -0.2 },
+  prayerArabic: { fontFamily: FONT.arabic, fontSize: 12.5, lineHeight: 18, marginTop: 1 },
+  prayerRemain: { fontFamily: FONT.bold, fontSize: 11.5, marginTop: 3 },
+  prayerTime: { fontFamily: FONT.bold, fontSize: 15.5, fontVariant: ['tabular-nums'] },
 
-  prayerName: {
-    fontFamily: FONT.semibold,
-    color: THEME.text,
-    fontSize: 15,
-  },
-  prayerNameActive: {
-    color: THEME.accent,
-  },
-  prayerNamePassed: {
-    color: THEME.textMuted,
-  },
-  prayerArabic: {
-    color: THEME.textMuted,
-    fontSize: 12,
-    marginTop: 3,
-    fontFamily: 'Amiri_400Regular',
-  },
-
-  prayerTime: {
-    fontFamily: FONT.bold,
-    color: THEME.textSoft,
-    fontSize: 16,
-    fontVariant: ['tabular-nums'],
-  },
-  prayerTimeActive: {
-    color: THEME.accent,
-  },
-  prayerTimePassed: {
-    color: THEME.textMuted,
-  },
-
-  inlineBadge: {
-    backgroundColor: THEME.accentSoft,
-    borderRadius: 999,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  inlineBadgeText: {
-    fontFamily: FONT.bold,
-    color: THEME.accent,
-    fontSize: 8,
-    letterSpacing: 0.8,
-  },
-
+  /* ─── Kerahat listesi ─────────────────────────── */
   kerahatCard: {
-    backgroundColor: THEME.surface,
-    borderRadius: 22,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: THEME.border,
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 4,
   },
   kerahatRow: {
     flexDirection: 'row',
@@ -338,39 +208,69 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 13,
   },
-  kerahatRowBorder: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: THEME.border,
+  kerahatRowBorder: { borderBottomWidth: StyleSheet.hairlineWidth },
+  kerahatLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  kerahatDot: { width: 6, height: 6, borderRadius: 3 },
+  kerahatName: { fontFamily: FONT.semibold, fontSize: 13.5 },
+  kerahatRange: { fontFamily: FONT.semibold, fontSize: 12.5, fontVariant: ['tabular-nums'] },
+
+  /* ─── Boş / yükleniyor durumları ──────────────── */
+  centerWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 36,
+    gap: 8,
   },
-  kerahatLeft: {
+  emptyBadge: {
+    width: 72,
+    height: 72,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  emptyTitle: { fontFamily: FONT.extrabold, fontSize: 23, letterSpacing: -0.5 },
+  emptyText: {
+    fontFamily: FONT.medium,
+    fontSize: 14,
+    lineHeight: 21,
+    textAlign: 'center',
+    marginBottom: 14,
+  },
+  emptyPrimary: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 7,
+    paddingHorizontal: 24,
+    paddingVertical: 13,
+    borderRadius: 14,
+    marginBottom: 2,
   },
-  kerahatDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 999,
-    backgroundColor: THEME.danger,
+  emptyPrimaryText: { fontFamily: FONT.bold, fontSize: 14.5 },
+  emptyGhost: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingHorizontal: 22,
+    paddingVertical: 12,
   },
-  kerahatName: {
-    fontFamily: FONT.semibold,
-    color: THEME.text,
-    fontSize: 13,
-  },
-  kerahatRange: {
-    fontFamily: FONT.semibold,
-    color: THEME.textSoft,
-    fontSize: 12,
-    fontVariant: ['tabular-nums'],
-  },
+  emptyGhostText: { fontFamily: FONT.bold, fontSize: 14 },
+  loadingText: { fontFamily: FONT.medium, fontSize: 13.5, marginTop: 12 },
 
-  ornament: {
-    textAlign: 'center',
-    color: THEME.textMuted,
-    fontSize: 13,
-    letterSpacing: 6,
-    paddingVertical: 24,
-    opacity: 0.75,
+  /* ─── Alt imza ────────────────────────────────── */
+  footerMark: {
+    alignItems: 'center',
+    paddingTop: 22,
+    paddingBottom: 10,
+    gap: 8,
+  },
+  footerLine: { width: 36, height: StyleSheet.hairlineWidth },
+  footerText: {
+    fontFamily: FONT.bold,
+    fontSize: 10,
+    letterSpacing: 4,
+    textTransform: 'uppercase',
+    opacity: 0.35,
   },
 });

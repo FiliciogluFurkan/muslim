@@ -45,6 +45,44 @@ function formatCountdown(ms: number): string {
   return [h, m, s].map((v) => String(v).padStart(2, '0')).join(':');
 }
 
+/* ─── Başlık altı canlı "sonraki vakit" rozeti ────── */
+
+function NextPrayerChip({
+  state,
+  accent,
+  accentSoft,
+}: {
+  state: PrayerTimesState;
+  accent: string;
+  accentSoft: string;
+}) {
+  const [now, setNow] = useState(() => Date.now());
+  const ready = state.status === 'ready' && !!state.next;
+
+  useEffect(() => {
+    if (!ready) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [ready, state.next]);
+
+  if (!ready || !state.next) return null;
+
+  return (
+    <Animated.View entering={FadeInDown.duration(420)} style={styles.nextChipRow}>
+      <PressableScale
+        onPress={() => router.push('/prayer-times')}
+        style={[styles.nextChip, { backgroundColor: accentSoft, borderColor: `${accent}2E` }]}
+      >
+        <View style={[styles.nextChipDot, { backgroundColor: accent }]} />
+        <Text style={[styles.nextChipLabel, { color: accent }]}>{state.next.name} vaktine</Text>
+        <Text style={[styles.nextChipTime, { color: accent }]}>
+          {formatCountdown(state.next.time.getTime() - now)}
+        </Text>
+      </PressableScale>
+    </Animated.View>
+  );
+}
+
 /* ─── Namaz hero kartı ────────────────────────────── */
 
 function PrayerHeroCard({
@@ -139,7 +177,7 @@ function PrayerHeroCard({
   const nextMs = next.time.getTime();
   const progress =
     nextMs > prevMs ? Math.min(1, Math.max(0, (now - prevMs) / (nextMs - prevMs))) : 0;
-  const remaining = formatCountdown(countdownTo.getTime() - now);
+  const remaining = formatCountdown(next.time.getTime() - now);
 
   return (
     <Pressable
@@ -280,9 +318,6 @@ export default function HomeScreen() {
     opacity: interpolate(scrollY.value, [80, 140], [0, 1], Extrapolation.CLAMP),
     transform: [{ translateY: interpolate(scrollY.value, [80, 140], [-10, 0], Extrapolation.CLAMP) }],
   }));
-  const heroParallax = useAnimatedStyle(() => ({
-    transform: [{ translateY: interpolate(scrollY.value, [160, 480], [0, -20], Extrapolation.CLAMP) }],
-  }));
 
   const hour = useMemo(() => new Date().getHours(), []);
   const greeting = getGreeting(hour);
@@ -391,6 +426,9 @@ export default function HomeScreen() {
           </Animated.View>
         </Animated.View>
 
+        {/* Canlı sonraki vakit rozeti */}
+        <NextPrayerChip state={prayer} accent={palette.accent} accentSoft={palette.accentSoft} />
+
         {/* ── Günün Ayeti ── */}
         <Animated.View entering={FadeInDown.duration(520).delay(80)}>
           <View
@@ -489,13 +527,11 @@ export default function HomeScreen() {
           </View>
 
           <View>
-            <Animated.View style={heroParallax}>
-              <PrayerHeroCard
-                state={prayer}
-                onPickCity={() => setCityPickerOpen(true)}
-                onEnableLocation={prayer.retry}
-              />
-            </Animated.View>
+            <PrayerHeroCard
+              state={prayer}
+              onPickCity={() => setCityPickerOpen(true)}
+              onEnableLocation={prayer.retry}
+            />
             <PrayerStrip
               state={prayer}
               cardBg={palette.card}

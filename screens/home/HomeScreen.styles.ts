@@ -1,29 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { FONT } from '../../lib/typography';
+import { HERO } from '../../lib/heroTheme';
 
-/**
- * İmza renkleri — temadan bağımsız zümrüt hero.
- * Derin zümrüt + nane vurgusu; tüm yüzeyler bu iki değerin
- * opaklık varyasyonlarından türetilir ki kart tek parça dursun.
- */
-export const HERO = {
-  bg: '#0E3D2E',
-  bgAlt: '#0A2F23',
-  mint: '#7CE3B8',
-  onDark: '#FFFFFF',
-  onDarkSoft: 'rgba(255,255,255,0.68)',
-  onDarkFaint: 'rgba(255,255,255,0.42)',
-  track: 'rgba(255,255,255,0.14)',
-  pill: 'rgba(255,255,255,0.10)',
-  pillBorder: 'rgba(255,255,255,0.14)',
-};
-
-// Üçüncü aksan (hızlı erişim çeşitliliği için)
-export const TEAL = '#2F8F8F';
+// İmza renkleri artık lib/heroTheme'de — Vakitler ekranıyla paylaşılır.
+export { HERO, TEAL } from '../../lib/heroTheme';
 
 const RADIUS = {
-  card: 24,
-  control: 14,
+  card: 20,
+  control: 13,
   pill: 999,
 };
 
@@ -60,7 +44,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
     paddingTop: 6,
-    paddingBottom: 22,
+    paddingBottom: 14,
   },
   titleBlock: { flex: 1 },
   greetingEyebrow: {
@@ -70,8 +54,29 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 4,
   },
-  greetingTitle: { fontFamily: FONT.extrabold, fontSize: 26, letterSpacing: -0.7 },
+  greetingTitle: { fontFamily: FONT.extrabold, fontSize: 25, letterSpacing: -0.6 },
   greetingSub: { fontFamily: FONT.medium, fontSize: 13, lineHeight: 18, marginTop: 4 },
+
+  /* Başlığın hemen altında canlı "sonraki vakit" rozeti */
+  nextChipRow: { paddingBottom: 18 },
+  nextChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 8,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
+    borderRadius: RADIUS.pill,
+    borderWidth: 1,
+  },
+  nextChipDot: { width: 6, height: 6, borderRadius: 3 },
+  nextChipLabel: { fontFamily: FONT.bold, fontSize: 12.5 },
+  nextChipTime: {
+    fontFamily: FONT.extrabold,
+    fontSize: 12.5,
+    letterSpacing: 0.3,
+    fontVariant: ['tabular-nums'],
+  },
 
   settingsBtn: {
     width: 42,
@@ -87,7 +92,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
     paddingHorizontal: 2,
   },
   sectionLabel: {
@@ -116,15 +121,15 @@ export const styles = StyleSheet.create({
   featureCard: {
     borderRadius: RADIUS.card,
     borderWidth: 1,
-    padding: 20,
-    marginBottom: 14,
+    padding: 16,
+    marginBottom: 12,
     overflow: 'hidden',
   },
   featureHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   featureKickerWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   featureKickerDot: { width: 6, height: 6, borderRadius: 3 },
@@ -141,22 +146,22 @@ export const styles = StyleSheet.create({
   },
   featureBadgeText: { fontFamily: FONT.bold, fontSize: 11.5 },
 
-  arabic: { fontFamily: FONT.arabic, fontSize: 26, lineHeight: 50, textAlign: 'right' },
+  arabic: { fontFamily: FONT.arabic, fontSize: 23, lineHeight: 44, textAlign: 'right' },
 
   accentRule: {
     width: 32,
     height: 2.5,
     borderRadius: 2,
-    marginVertical: 16,
+    marginVertical: 12,
   },
 
-  turkish: { fontFamily: FONT.regular, fontSize: 15, lineHeight: 25.5 },
+  turkish: { fontFamily: FONT.regular, fontSize: 14.5, lineHeight: 23 },
 
   featureFooterRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 18,
+    marginTop: 14,
   },
   featureRef: { fontFamily: FONT.bold, fontSize: 12.5, letterSpacing: 0.2, flexShrink: 1 },
 
@@ -165,14 +170,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: RADIUS.control,
   },
   textBtnLabel: { fontFamily: FONT.bold, fontSize: 13 },
   iconBtn: {
-    width: 38,
-    height: 38,
+    width: 36,
+    height: 36,
     borderRadius: RADIUS.control,
     alignItems: 'center',
     justifyContent: 'center',
@@ -182,13 +187,13 @@ export const styles = StyleSheet.create({
   /* ─── Hadis (sol altın çizgili alıntı) ────────── */
   quoteRow: { flexDirection: 'row', gap: 14 },
   quoteBar: { width: 3, borderRadius: 2, alignSelf: 'stretch' },
-  hadith: { flex: 1, fontFamily: FONT.italic, fontSize: 15.5, lineHeight: 26 },
+  hadith: { flex: 1, fontFamily: FONT.italic, fontSize: 15, lineHeight: 24 },
 
   /* ─── Namaz hero (zümrüt) ─────────────────────── */
   prayerHero: {
     borderRadius: RADIUS.card,
-    padding: 20,
-    marginBottom: 10,
+    padding: 18,
+    marginBottom: 8,
     backgroundColor: HERO.bg,
     overflow: 'hidden',
     shadowColor: '#08251A',
@@ -219,7 +224,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 18,
+    marginBottom: 14,
   },
   heroLabelWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   heroLabelDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: HERO.mint },
@@ -246,34 +251,34 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   prayerHeroName: {
     fontFamily: FONT.extrabold,
     color: HERO.onDark,
-    fontSize: 30,
-    lineHeight: 33,
-    letterSpacing: -0.6,
+    fontSize: 27,
+    lineHeight: 30,
+    letterSpacing: -0.5,
   },
-  prayerHeroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 19, lineHeight: 30, marginTop: 2 },
+  prayerHeroArabic: { fontFamily: FONT.arabic, color: HERO.mint, fontSize: 18, lineHeight: 28, marginTop: 2 },
   timePill: {
     backgroundColor: HERO.onDark,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: RADIUS.control,
   },
   timePillText: {
     fontFamily: FONT.extrabold,
     color: HERO.bgAlt,
-    fontSize: 18,
+    fontSize: 17,
     letterSpacing: 0.4,
     fontVariant: ['tabular-nums'],
   },
-  countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8, marginBottom: 12 },
+  countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8, marginBottom: 10 },
   prayerHeroCountdown: {
     fontFamily: FONT.extrabold,
     color: HERO.onDark,
-    fontSize: 30,
+    fontSize: 28,
     letterSpacing: 0.8,
     fontVariant: ['tabular-nums'],
   },
@@ -281,7 +286,7 @@ export const styles = StyleSheet.create({
   progressTrack: { height: 4, borderRadius: 2, backgroundColor: HERO.track, overflow: 'hidden' },
   progressFill: { height: 4, borderRadius: 2, backgroundColor: HERO.mint },
   heroMuted: { fontFamily: FONT.medium, color: HERO.onDarkSoft, fontSize: 13.5, lineHeight: 20, marginTop: 4 },
-  heroActions: { flexDirection: 'row', gap: 10, marginTop: 16 },
+  heroActions: { flexDirection: 'row', gap: 10, marginTop: 14 },
   heroCta: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -306,43 +311,43 @@ export const styles = StyleSheet.create({
 
   /* ─── Vakit şeridi ────────────────────────────── */
   stripCard: {
-    borderRadius: 20,
+    borderRadius: 18,
     borderWidth: 1,
-    paddingVertical: 8,
-    marginBottom: 28,
+    paddingVertical: 6,
+    marginBottom: 22,
   },
   stripContent: { paddingHorizontal: 8, gap: 4 },
   stripItem: {
     alignItems: 'center',
-    paddingVertical: 9,
+    paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 14,
-    minWidth: 60,
+    borderRadius: 13,
+    minWidth: 58,
   },
   stripName: { fontFamily: FONT.semibold, fontSize: 10.5, marginBottom: 4, letterSpacing: 0.3 },
   stripTime: { fontFamily: FONT.bold, fontSize: 13.5, fontVariant: ['tabular-nums'] },
   stripNextDot: { width: 4, height: 4, borderRadius: 2, marginTop: 5 },
 
   /* ─── Hızlı erişim ────────────────────────────── */
-  navGrid: { flexDirection: 'row', gap: 10, marginBottom: 24 },
+  navGrid: { flexDirection: 'row', gap: 10, marginBottom: 22 },
   navCard: {
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 18,
     borderWidth: 1,
-    paddingVertical: 16,
-    paddingHorizontal: 14,
-    minHeight: 104,
+    paddingVertical: 14,
+    paddingHorizontal: 13,
+    minHeight: 94,
     justifyContent: 'space-between',
   },
   navCardIconWrap: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
+    width: 34,
+    height: 34,
+    borderRadius: 11,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
-  navCardLabel: { fontFamily: FONT.bold, fontSize: 14.5, marginBottom: 2, letterSpacing: -0.2 },
+  navCardLabel: { fontFamily: FONT.bold, fontSize: 14, marginBottom: 2, letterSpacing: -0.2 },
   navCardDesc: { fontFamily: FONT.medium, fontSize: 11, lineHeight: 14 },
 
   /* ─── Alt imza ────────────────────────────────── */

@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 import { CITIES } from '../lib/cities';
 import { useMushafStore } from '../lib/store';
@@ -53,12 +54,12 @@ export function CityPicker({ visible, onClose, onAuto }: Props) {
           <View style={styles.header}>
             <Text style={[styles.title, { color: palette.fg }]}>Şehir Seç</Text>
             <Pressable onPress={onClose} hitSlop={10}>
-              <Text style={[styles.close, { color: palette.muted }]}>✕</Text>
+              <Ionicons name="close" size={20} color={palette.muted} />
             </Pressable>
           </View>
 
           <View style={[styles.searchWrap, { backgroundColor: palette.input }]}>
-            <Text style={[styles.searchIcon, { color: palette.muted }]}>⌕</Text>
+            <Ionicons name="search-outline" size={17} color={palette.muted} style={styles.searchIcon} />
             <TextInput
               style={[styles.search, { color: palette.fg }]}
               placeholder="Şehir ara..."
@@ -83,7 +84,7 @@ export function CityPicker({ visible, onClose, onAuto }: Props) {
               },
             ]}
           >
-            <Text style={[styles.autoIcon, { color: palette.accent }]}>◎</Text>
+            <Ionicons name="navigate-circle-outline" size={24} color={palette.accent} />
             <View style={{ flex: 1 }}>
               <Text style={[styles.autoTitle, { color: palette.fg }]}>Otomatik (Konum)</Text>
               <Text style={[styles.autoDesc, { color: palette.muted }]}>
@@ -91,7 +92,7 @@ export function CityPicker({ visible, onClose, onAuto }: Props) {
               </Text>
             </View>
             {manualLocation === null && (
-              <Text style={[styles.check, { color: palette.accent }]}>✓</Text>
+              <Ionicons name="checkmark" size={17} color={palette.accent} />
             )}
           </PressableScale>
 
@@ -110,7 +111,7 @@ export function CityPicker({ visible, onClose, onAuto }: Props) {
                   <Text style={[styles.cityName, { color: active ? palette.accent : palette.fg }]}>
                     {c.city}
                   </Text>
-                  {active && <Text style={[styles.check, { color: palette.accent }]}>✓</Text>}
+                  {active && <Ionicons name="checkmark" size={17} color={palette.accent} />}
                 </PressableScale>
               );
             })}
@@ -144,7 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   title: { fontFamily: FONT.extrabold, fontSize: 22, letterSpacing: -0.4 },
-  close: { fontSize: 18, fontWeight: '700' },
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     marginBottom: 14,
   },
-  searchIcon: { fontSize: 20, marginRight: 8, fontWeight: '700' },
+  searchIcon: { marginRight: 8 },
   search: { flex: 1, fontFamily: FONT.medium, paddingVertical: 12, fontSize: 15 },
   autoRow: {
     flexDirection: 'row',
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
   },
-  autoIcon: { fontSize: 22 },
   autoTitle: { fontFamily: FONT.bold, fontSize: 15 },
   autoDesc: { fontFamily: FONT.medium, fontSize: 12, marginTop: 2 },
   cityRow: {
@@ -174,5 +173,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   cityName: { fontFamily: FONT.semibold, fontSize: 16 },
-  check: { fontSize: 16, fontWeight: '700' },
 });
