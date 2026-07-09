@@ -5,7 +5,7 @@ import { useAudioPlayer } from 'expo-audio';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { VIDEO_ASSETS, getVideosForSurah, type VideoKey } from '../../lib/videoAssets';
-import { testSurahData, getAudioUrl, type SurahVideoData } from '../../lib/videoSurahData';
+import { getSurahData, getAudioUrl, type SurahVideoData } from '../../lib/videoSurahData';
 import { styles } from './VideoPlayerScreen.styles';
 
 const LOG = __DEV__
@@ -13,9 +13,17 @@ const LOG = __DEV__
       console.log(`[VP][${tag}]`, msg, data ?? '')
   : () => {};
 
-export default function VideoPlayerScreen() {
+interface VideoPlayerScreenProps {
+  surahNumber?: number;
+}
+
+export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreenProps) {
   const insets = useSafeAreaInsets();
-  const surahData: SurahVideoData = testSurahData;
+  
+  // Validate surah number (1-114)
+  const validSurahNumber = Math.max(1, Math.min(Math.floor(surahNumber), 114));
+  
+  const surahData: SurahVideoData = getSurahData(validSurahNumber);
   const videoKeys = getVideosForSurah(surahData.surahNumber);
 
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);

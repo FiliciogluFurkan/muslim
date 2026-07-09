@@ -1,0 +1,472 @@
+{
+  "surahNumber": 27,
+  "totalDuration": 372.0,
+  "timings": [
+    {
+      "verseNumber": 1,
+      "start": 0.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 2,
+      "start": 3.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 3,
+      "start": 7.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 4,
+      "start": 12.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 5,
+      "start": 17.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 6,
+      "start": 20.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 7,
+      "start": 23.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 8,
+      "start": 27.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 9,
+      "start": 32.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 10,
+      "start": 37.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 11,
+      "start": 40.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 12,
+      "start": 43.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 13,
+      "start": 47.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 14,
+      "start": 52.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 15,
+      "start": 57.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 16,
+      "start": 60.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 17,
+      "start": 63.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 18,
+      "start": 67.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 19,
+      "start": 72.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 20,
+      "start": 77.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 21,
+      "start": 80.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 22,
+      "start": 83.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 23,
+      "start": 87.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 24,
+      "start": 92.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 25,
+      "start": 97.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 26,
+      "start": 100.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 27,
+      "start": 103.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 28,
+      "start": 107.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 29,
+      "start": 112.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 30,
+      "start": 117.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 31,
+      "start": 120.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 32,
+      "start": 123.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 33,
+      "start": 127.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 34,
+      "start": 132.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 35,
+      "start": 137.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 36,
+      "start": 140.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 37,
+      "start": 143.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 38,
+      "start": 147.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 39,
+      "start": 152.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 40,
+      "start": 157.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 41,
+      "start": 160.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 42,
+      "start": 163.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 43,
+      "start": 167.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 44,
+      "start": 172.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 45,
+      "start": 177.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 46,
+      "start": 180.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 47,
+      "start": 183.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 48,
+      "start": 187.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 49,
+      "start": 192.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 50,
+      "start": 197.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 51,
+      "start": 200.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 52,
+      "start": 203.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 53,
+      "start": 207.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 54,
+      "start": 212.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 55,
+      "start": 217.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 56,
+      "start": 220.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 57,
+      "start": 223.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 58,
+      "start": 227.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 59,
+      "start": 232.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 60,
+      "start": 237.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 61,
+      "start": 240.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 62,
+      "start": 243.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 63,
+      "start": 247.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 64,
+      "start": 252.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 65,
+      "start": 257.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 66,
+      "start": 260.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 67,
+      "start": 263.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 68,
+      "start": 267.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 69,
+      "start": 272.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 70,
+      "start": 277.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 71,
+      "start": 280.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 72,
+      "start": 283.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 73,
+      "start": 287.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 74,
+      "start": 292.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 75,
+      "start": 297.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 76,
+      "start": 300.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 77,
+      "start": 303.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 78,
+      "start": 307.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 79,
+      "start": 312.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 80,
+      "start": 317.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 81,
+      "start": 320.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 82,
+      "start": 323.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 83,
+      "start": 327.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 84,
+      "start": 332.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 85,
+      "start": 337.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 86,
+      "start": 340.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 87,
+      "start": 343.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 88,
+      "start": 347.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 89,
+      "start": 352.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 90,
+      "start": 357.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 91,
+      "start": 360.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 92,
+      "start": 363.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 93,
+      "start": 367.5,
+      "duration": 4.5
+    }
+  ],
+  "note": "Basic estimated timing - replace with actual timing data"
+}

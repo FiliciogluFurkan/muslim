@@ -1,0 +1,112 @@
+{
+  "surahNumber": 92,
+  "totalDuration": 83.5,
+  "timings": [
+    {
+      "verseNumber": 1,
+      "start": 0.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 2,
+      "start": 3.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 3,
+      "start": 7.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 4,
+      "start": 12.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 5,
+      "start": 17.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 6,
+      "start": 20.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 7,
+      "start": 23.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 8,
+      "start": 27.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 9,
+      "start": 32.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 10,
+      "start": 37.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 11,
+      "start": 40.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 12,
+      "start": 43.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 13,
+      "start": 47.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 14,
+      "start": 52.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 15,
+      "start": 57.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 16,
+      "start": 60.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 17,
+      "start": 63.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 18,
+      "start": 67.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 19,
+      "start": 72.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 20,
+      "start": 77.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 21,
+      "start": 80.0,
+      "duration": 3.5
+    }
+  ],
+  "note": "Basic estimated timing - replace with actual timing data"
+}

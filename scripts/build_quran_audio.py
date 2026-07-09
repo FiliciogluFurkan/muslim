@@ -175,7 +175,7 @@ def main():
     # Hangi sureleri işleyeceksin?
     # Tümü için: range(1, 115)
     # Test için: [1, 112, 113, 114]
-    TARGET_SURAHS = [1]  # ← önce sadece Fatiha ile test et
+    TARGET_SURAHS = range(1, 115)  # ← Tüm 114 sure
 
     results = {}
     for surah_num in TARGET_SURAHS:

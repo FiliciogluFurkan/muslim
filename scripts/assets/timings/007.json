@@ -1,0 +1,1037 @@
+{
+  "surahNumber": 7,
+  "totalDuration": 823.5,
+  "timings": [
+    {
+      "verseNumber": 1,
+      "start": 0.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 2,
+      "start": 3.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 3,
+      "start": 7.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 4,
+      "start": 12.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 5,
+      "start": 17.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 6,
+      "start": 20.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 7,
+      "start": 23.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 8,
+      "start": 27.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 9,
+      "start": 32.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 10,
+      "start": 37.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 11,
+      "start": 40.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 12,
+      "start": 43.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 13,
+      "start": 47.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 14,
+      "start": 52.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 15,
+      "start": 57.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 16,
+      "start": 60.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 17,
+      "start": 63.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 18,
+      "start": 67.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 19,
+      "start": 72.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 20,
+      "start": 77.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 21,
+      "start": 80.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 22,
+      "start": 83.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 23,
+      "start": 87.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 24,
+      "start": 92.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 25,
+      "start": 97.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 26,
+      "start": 100.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 27,
+      "start": 103.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 28,
+      "start": 107.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 29,
+      "start": 112.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 30,
+      "start": 117.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 31,
+      "start": 120.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 32,
+      "start": 123.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 33,
+      "start": 127.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 34,
+      "start": 132.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 35,
+      "start": 137.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 36,
+      "start": 140.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 37,
+      "start": 143.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 38,
+      "start": 147.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 39,
+      "start": 152.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 40,
+      "start": 157.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 41,
+      "start": 160.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 42,
+      "start": 163.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 43,
+      "start": 167.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 44,
+      "start": 172.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 45,
+      "start": 177.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 46,
+      "start": 180.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 47,
+      "start": 183.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 48,
+      "start": 187.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 49,
+      "start": 192.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 50,
+      "start": 197.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 51,
+      "start": 200.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 52,
+      "start": 203.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 53,
+      "start": 207.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 54,
+      "start": 212.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 55,
+      "start": 217.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 56,
+      "start": 220.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 57,
+      "start": 223.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 58,
+      "start": 227.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 59,
+      "start": 232.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 60,
+      "start": 237.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 61,
+      "start": 240.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 62,
+      "start": 243.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 63,
+      "start": 247.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 64,
+      "start": 252.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 65,
+      "start": 257.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 66,
+      "start": 260.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 67,
+      "start": 263.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 68,
+      "start": 267.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 69,
+      "start": 272.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 70,
+      "start": 277.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 71,
+      "start": 280.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 72,
+      "start": 283.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 73,
+      "start": 287.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 74,
+      "start": 292.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 75,
+      "start": 297.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 76,
+      "start": 300.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 77,
+      "start": 303.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 78,
+      "start": 307.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 79,
+      "start": 312.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 80,
+      "start": 317.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 81,
+      "start": 320.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 82,
+      "start": 323.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 83,
+      "start": 327.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 84,
+      "start": 332.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 85,
+      "start": 337.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 86,
+      "start": 340.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 87,
+      "start": 343.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 88,
+      "start": 347.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 89,
+      "start": 352.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 90,
+      "start": 357.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 91,
+      "start": 360.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 92,
+      "start": 363.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 93,
+      "start": 367.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 94,
+      "start": 372.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 95,
+      "start": 377.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 96,
+      "start": 380.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 97,
+      "start": 383.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 98,
+      "start": 387.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 99,
+      "start": 392.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 100,
+      "start": 397.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 101,
+      "start": 400.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 102,
+      "start": 403.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 103,
+      "start": 407.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 104,
+      "start": 412.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 105,
+      "start": 417.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 106,
+      "start": 420.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 107,
+      "start": 423.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 108,
+      "start": 427.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 109,
+      "start": 432.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 110,
+      "start": 437.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 111,
+      "start": 440.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 112,
+      "start": 443.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 113,
+      "start": 447.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 114,
+      "start": 452.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 115,
+      "start": 457.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 116,
+      "start": 460.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 117,
+      "start": 463.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 118,
+      "start": 467.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 119,
+      "start": 472.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 120,
+      "start": 477.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 121,
+      "start": 480.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 122,
+      "start": 483.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 123,
+      "start": 487.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 124,
+      "start": 492.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 125,
+      "start": 497.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 126,
+      "start": 500.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 127,
+      "start": 503.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 128,
+      "start": 507.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 129,
+      "start": 512.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 130,
+      "start": 517.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 131,
+      "start": 520.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 132,
+      "start": 523.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 133,
+      "start": 527.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 134,
+      "start": 532.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 135,
+      "start": 537.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 136,
+      "start": 540.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 137,
+      "start": 543.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 138,
+      "start": 547.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 139,
+      "start": 552.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 140,
+      "start": 557.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 141,
+      "start": 560.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 142,
+      "start": 563.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 143,
+      "start": 567.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 144,
+      "start": 572.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 145,
+      "start": 577.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 146,
+      "start": 580.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 147,
+      "start": 583.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 148,
+      "start": 587.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 149,
+      "start": 592.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 150,
+      "start": 597.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 151,
+      "start": 600.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 152,
+      "start": 603.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 153,
+      "start": 607.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 154,
+      "start": 612.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 155,
+      "start": 617.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 156,
+      "start": 620.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 157,
+      "start": 623.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 158,
+      "start": 627.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 159,
+      "start": 632.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 160,
+      "start": 637.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 161,
+      "start": 640.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 162,
+      "start": 643.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 163,
+      "start": 647.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 164,
+      "start": 652.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 165,
+      "start": 657.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 166,
+      "start": 660.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 167,
+      "start": 663.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 168,
+      "start": 667.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 169,
+      "start": 672.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 170,
+      "start": 677.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 171,
+      "start": 680.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 172,
+      "start": 683.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 173,
+      "start": 687.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 174,
+      "start": 692.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 175,
+      "start": 697.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 176,
+      "start": 700.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 177,
+      "start": 703.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 178,
+      "start": 707.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 179,
+      "start": 712.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 180,
+      "start": 717.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 181,
+      "start": 720.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 182,
+      "start": 723.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 183,
+      "start": 727.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 184,
+      "start": 732.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 185,
+      "start": 737.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 186,
+      "start": 740.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 187,
+      "start": 743.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 188,
+      "start": 747.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 189,
+      "start": 752.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 190,
+      "start": 757.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 191,
+      "start": 760.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 192,
+      "start": 763.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 193,
+      "start": 767.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 194,
+      "start": 772.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 195,
+      "start": 777.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 196,
+      "start": 780.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 197,
+      "start": 783.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 198,
+      "start": 787.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 199,
+      "start": 792.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 200,
+      "start": 797.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 201,
+      "start": 800.0,
+      "duration": 3.5
+    },
+    {
+      "verseNumber": 202,
+      "start": 803.5,
+      "duration": 4.0
+    },
+    {
+      "verseNumber": 203,
+      "start": 807.5,
+      "duration": 4.5
+    },
+    {
+      "verseNumber": 204,
+      "start": 812.0,
+      "duration": 5.0
+    },
+    {
+      "verseNumber": 205,
+      "start": 817.0,
+      "duration": 3.0
+    },
+    {
+      "verseNumber": 206,
+      "start": 820.0,
+      "duration": 3.5
+    }
+  ],
+  "note": "Basic estimated timing - replace with actual timing data"
+}
