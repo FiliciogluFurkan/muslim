@@ -14,7 +14,8 @@ import { FONT } from '../../lib/typography';
 import { PressableScale } from '../../components/PressableScale';
 
 const surahs = getAllSurahs();
-const SURAHS_WITH_VIDEO = [1];
+// Tüm sureler video destekli
+const SURAHS_WITH_VIDEO = Array.from({ length: 114 }, (_, i) => i + 1);
 
 export default function SurahListScreen() {
   const insets = useSafeAreaInsets();
@@ -33,11 +34,8 @@ export default function SurahListScreen() {
   }, [query]);
 
   const handleSurahPress = useCallback((surahNumber: number) => {
-    if (SURAHS_WITH_VIDEO.includes(surahNumber)) {
-      router.push('/video-player');
-    } else {
-      router.push({ pathname: '/surah/[id]', params: { id: surahNumber } });
-    }
+    // Tüm sureler video destekli
+    router.push(`/video-player/${surahNumber}`);
   }, []);
 
   const renderItem = useCallback(

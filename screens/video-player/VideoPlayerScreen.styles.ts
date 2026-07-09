@@ -61,16 +61,19 @@ export const styles = StyleSheet.create({
   },
 
   // ✅ Yazıların arkasına koyu katman
+  // Not: yükseklik artık sabit değil — VideoPlayerScreen.tsx içinde
+  // maxHeight ile sınırlanıp ScrollView'a bırakılıyor, uzun ayetler
+  // burada taşmıyor.
   verseContainer: {
-    justifyContent: 'center',        // flex-end → center (yazılar ortada)
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 28,
     gap: 14,
     marginHorizontal: 16,
-    marginVertical: 60,              // header ve bottom'dan uzak dursun
+    marginVertical: 60,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',  // yarı saydam koyu arka plan
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   verseText: {
     fontFamily: 'Amiri_700Bold',

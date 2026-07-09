@@ -1,25 +1,24 @@
 // lib/videoAssets.ts
-// Yerel videolar: assets/videos/ (gitignore'da — Pexels/Pixabay'dan indirip ekleyin)
-// Geliştirme için uzak örnek videolar kullanılır; yerel dosyalar varsa require'a geçin.
+// CDN'den videolar yükleniyor (Cloudflare R2)
 
-const REMOTE_VIDEOS = {
-  kabe: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-  medine: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-  doga: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-  deniz: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-  gece: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+const CDN_BASE_URL = 'https://pub-d349e03f186e4a2fbcc17b4c14519503.r2.dev/videos/videos';
+
+export const VIDEO_ASSETS = {
+  kabe: { uri: `${CDN_BASE_URL}/kabe_c.mp4` },
+  medine: { uri: `${CDN_BASE_URL}/medine_c.mp4` },
+  doga: { uri: `${CDN_BASE_URL}/doga_c.mp4` },
+  deniz: { uri: `${CDN_BASE_URL}/deniz_c.mp4` },
+  gece: { uri: `${CDN_BASE_URL}/gece_c.mp4` },
 } as const;
 
-// Yerel videoları kullanmak için aşağıdaki bloğu açıp REMOTE_VIDEOS yerine bunu export edin:
+// Yerel videolar için yedek (development)
 // export const VIDEO_ASSETS = {
-//   kabe:   require('../assets/videos/kabe_c.mp4'),
+//   kabe: require('../assets/videos/kabe_c.mp4'),
 //   medine: require('../assets/videos/medine_c.mp4'),
-//   doga:   require('../assets/videos/doga_c.mp4'),
-//   deniz:  require('../assets/videos/deniz_c.mp4'),
-//   gece:   require('../assets/videos/gece_c.mp4'),
+//   doga: require('../assets/videos/doga_c.mp4'),
+//   deniz: require('../assets/videos/deniz_c.mp4'),
+//   gece: require('../assets/videos/gece_c.mp4'),
 // } as const;
-
-export const VIDEO_ASSETS = REMOTE_VIDEOS;
 
 export type VideoKey = keyof typeof VIDEO_ASSETS;
 
