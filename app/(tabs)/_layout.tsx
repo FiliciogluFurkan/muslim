@@ -70,7 +70,27 @@ function QuranIcon({ color, focused }: { color: string; focused: boolean }) {
   );
 }
 
-// Aktif "hap" arka planı + ikon yükselmesi (yaylı animasyon)
+// Dualar ikonu — el açık dua
+function DualarIcon({ color, focused }: { color: string; focused: boolean }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M12 3C12 3 8 6 8 10C8 12.2 9.8 14 12 14C14.2 14 16 12.2 16 10C16 6 12 3 12 3Z"
+        stroke={color}
+        strokeWidth={focused ? 2 : 1.6}
+        strokeLinejoin="round"
+        fill={focused ? color : 'none'}
+        fillOpacity={focused ? 0.15 : 0}
+      />
+      <Path
+        d="M6 14C6 14 4 15 4 17C4 19 5.8 20 8 20H16C18.2 20 20 19 20 17C20 15 18 14 18 14"
+        stroke={color}
+        strokeWidth={focused ? 2 : 1.6}
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
 function TabIcon({
   focused,
   accent,
@@ -106,6 +126,30 @@ function TabIcon({
       />
       <Animated.View style={iconStyle}>{children}</Animated.View>
     </View>
+  );
+}
+
+// Namaz Takip ikonu — takvim + check
+function NamazTakipIcon({ color, focused }: { color: string; focused: boolean }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M8 2V5M16 2V5M3 9H21M4 4H20C20.55 4 21 4.45 21 5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V5C3 4.45 3.45 4 4 4Z"
+        stroke={color}
+        strokeWidth={focused ? 2 : 1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill={focused ? color : 'none'}
+        fillOpacity={focused ? 0.1 : 0}
+      />
+      <Path
+        d="M8 13L11 16L16 11"
+        stroke={color}
+        strokeWidth={focused ? 2 : 1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
   );
 }
 
@@ -164,6 +208,28 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} accent={palette.accent}>
               <PrayerTimesIcon color={color} focused={focused} />
+            </TabIcon>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="dualar"
+        options={{
+          title: 'Dualar',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused} accent={palette.accent}>
+              <DualarIcon color={color} focused={focused} />
+            </TabIcon>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="namaz-takip"
+        options={{
+          title: 'Takip',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused} accent={palette.accent}>
+              <NamazTakipIcon color={color} focused={focused} />
             </TabIcon>
           ),
         }}

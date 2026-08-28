@@ -11,35 +11,40 @@ export type ManualLocation = {
   city: string;
 } | null;
 
+export type PrayerName = 'Sabah' | 'Öğle' | 'İkindi' | 'Akşam' | 'Yatsı';
+export const PRAYER_NAMES: PrayerName[] = ['Sabah', 'Öğle', 'İkindi', 'Akşam', 'Yatsı'];
+
+export type DayKey = string; // YYYY-MM-DD
+export type DayRecord = Partial<Record<PrayerName, boolean>>;
+export type PrayerLog = Record<DayKey, DayRecord>;
+
 type MushafState = {
-  /* widget sync */
   lastSyncedDateSeed: number | null;
   setLastSyncedDateSeed: (seed: number) => void;
 
-  /* namaz vakti için sabit konum (null → otomatik/GPS) */
   manualLocation: ManualLocation;
   setManualLocation: (loc: ManualLocation) => void;
 
-  /* meal seçimi */
   selectedTranslation: TranslationId;
   setSelectedTranslation: (id: TranslationId) => void;
 
-  /* font boyutu (Arapça) */
   fontSize: number;
   setFontSize: (size: number) => void;
 
-  /* tema */
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
 
-  /* meal görüntüleme */
   showTranslation: boolean;
   setShowTranslation: (show: boolean) => void;
+
+  prayerLog: PrayerLog;
+  togglePrayer: (day: DayKey, prayer: PrayerName) => void;
+  getPrayerDay: (day: DayKey) => DayRecord;
 };
 
 export const useMushafStore = create<MushafState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       lastSyncedDateSeed: null,
       setLastSyncedDateSeed: (seed) => set({ lastSyncedDateSeed: seed }),
 
@@ -57,6 +62,19 @@ export const useMushafStore = create<MushafState>()(
 
       showTranslation: true,
       setShowTranslation: (show) => set({ showTranslation: show }),
+
+      prayerLog: {},
+      togglePrayer: (day, prayer) =>
+        set((state) => {
+          const dayRecord = state.prayerLog[day] ?? {};
+          return {
+            prayerLog: {
+              ...state.prayerLog,
+              [day]: { ...dayRecord, [prayer]: !dayRecord[prayer] },
+            },
+          };
+        }),
+      getPrayerDay: (day) => get().prayerLog[day] ?? {},
     }),
     {
       name: 'mushaf-settings',
@@ -67,6 +85,7 @@ export const useMushafStore = create<MushafState>()(
         themeMode: state.themeMode,
         showTranslation: state.showTranslation,
         manualLocation: state.manualLocation,
+        prayerLog: state.prayerLog,
       }),
     },
   ),

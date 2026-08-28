@@ -9,6 +9,7 @@ import {
   StyleSheet,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  InteractionManager,
 } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { useAudioPlayer } from 'expo-audio';
@@ -18,19 +19,21 @@ import { VIDEO_ASSETS, getVideosForSurah, type VideoKey } from '../../lib/videoA
 import { getSurahData, getAudioUrl, type SurahVideoData } from '../../lib/videoSurahData';
 import { styles } from './VideoPlayerScreen.styles';
 
-const LOG = __DEV__
-  ? (tag: string, msg: string, data?: any) =>
-      console.log(`[VP][${tag}]`, msg, data ?? '')
-  : () => {};
-
 interface VideoPlayerScreenProps {
   surahNumber?: number;
 }
 
+// ============================================================
+// LOG SİSTEMİ — geçici teşhis amaçlı, __DEV__ gate'i YOK,
+// test bitince kaldırılacak / azaltılacak.
+// ============================================================
+const MOUNT_TS = Date.now();
+const ts = () => `${((Date.now() - MOUNT_TS) / 1000).toFixed(2)}s`;
+const LOG = (tag: string, msg: string, data?: any) => {
+  console.log(`[VP ${ts()}][${tag}] ${msg}`, data !== undefined ? data : '');
+};
+
 // Ayet uzunluğuna göre uygun font boyutunu döndürür.
-// Kendi tasarımına göre eşik/değerleri styles.verseText'in
-// temel fontSize'ına göre ayarlayabilirsin.
-// baseSize = 42, baseLineHeight = 64 (bkz. styles.verseText)
 function getAdaptiveFontSize(text: string | undefined, baseSize: number) {
   const len = text?.length ?? 0;
   if (len > 320) return Math.max(baseSize - 20, 22);
@@ -42,11 +45,9 @@ function getAdaptiveFontSize(text: string | undefined, baseSize: number) {
 }
 
 function getAdaptiveLineHeight(fontSize: number, baseSize: number, baseLineHeight: number) {
-  // Oran korunarak lineHeight de küçültülüyor (42/64 ≈ 1.524)
   return Math.round((baseLineHeight / baseSize) * fontSize);
 }
 
-// baseSize = 15 (bkz. styles.translationText)
 function getAdaptiveTranslationSize(text: string | undefined, baseSize: number) {
   const len = text?.length ?? 0;
   if (len > 260) return Math.max(baseSize - 2, 13);
@@ -57,11 +58,18 @@ function getAdaptiveTranslationSize(text: string | undefined, baseSize: number) 
 export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreenProps) {
   const insets = useSafeAreaInsets();
 
-  // Validate surah number (1-114)
   const validSurahNumber = Math.max(1, Math.min(Math.floor(surahNumber), 114));
 
-  const surahData: SurahVideoData = getSurahData(validSurahNumber);
-  const videoKeys = getVideosForSurah(surahData.surahNumber);
+  const surahData: SurahVideoData = useMemo(
+  () => getSurahData(validSurahNumber),
+  [validSurahNumber]
+);
+const videoKeys = useMemo(
+  () => getVideosForSurah(surahData.surahNumber),
+  [surahData.surahNumber]
+);
+
+  LOG('MOUNT', `Sure ${surahData.surahNumber} yükleniyor, ${surahData.verses.length} ayet, videoKeys=`, videoKeys);
 
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
   const [activeSlot, setActiveSlot] = useState(0);
@@ -73,37 +81,48 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
   const activeSlotRef = useRef(0);
   const swipeAnim = useRef(new Animated.Value(0)).current;
 
-  // Ayet gövdesi kaydırma ipucu için pulse animasyonu
+  // Hızlı ardışık swipe'larda video değişimini geciktirmek için (debounce)
+  const pendingVerseRef = useRef<number | null>(null);
+  const switchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Debounce beklerken (kullanıcı hâlâ swipe yapıyor / gerçek seekTo henüz çağrılmadı)
+  // tracking loop'un eski/stale currentTime'a göre index'i geri döndürmesini engeller.
+  const pendingSeekRef = useRef(false);
+
+  // Manuel seek sonrası tracking loop'un index'i geri çevirip çevirmediğini
+  // tespit etmek için (RACE CONDITION teşhisi)
+  const lastManualSeekRef = useRef<{ verse: number; ts: number; targetTime: number } | null>(null);
+
   const scrollHintAnim = useRef(new Animated.Value(0)).current;
   const verseScrollRef = useRef<ScrollView>(null);
   const verseViewportHeight = useRef(0);
   const verseContentHeight = useRef(0);
 
-  // Video slotları için yumuşak crossfade animasyonları
   const slotOpacities = useRef([
     new Animated.Value(1),
     new Animated.Value(0),
     new Animated.Value(0),
   ]).current;
 
-  const audioPlayer = useAudioPlayer(getAudioUrl(surahData.surahNumber));
+  const audioUrl = getAudioUrl(surahData.surahNumber);
+  LOG('AUDIO', `Audio URL yükleniyor`, audioUrl);
+  const audioPlayer = useAudioPlayer(audioUrl);
 
   const playerA = useVideoPlayer(VIDEO_ASSETS[videoKeys[0]], p => {
     p.loop = true;
     p.muted = true;
+    const t0 = Date.now();
     p.play();
+    LOG('PLAYER_A', `play() çağrıldı (init)`, `${Date.now() - t0}ms sürdü`);
   });
   const playerB = useVideoPlayer(VIDEO_ASSETS[videoKeys[1]], p => {
     p.loop = true;
     p.muted = true;
-    p.play();
   });
   const playerC = useVideoPlayer(VIDEO_ASSETS[videoKeys[2]], p => {
     p.loop = true;
     p.muted = true;
-    p.play();
   });
-  const players = [playerA, playerB, playerC];
+  const players = useMemo(() => [playerA, playerB, playerC], [playerA, playerB, playerC]);
 
   const slotVideoRef = useRef<[VideoKey, VideoKey, VideoKey]>([
     videoKeys[0],
@@ -112,14 +131,32 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
   ]);
 
   useEffect(() => {
+    LOG('PLAYER_BC', 'InteractionManager bekleniyor (playerB/C gecikmeli başlatma)...');
+    const t0 = Date.now();
+    const task = InteractionManager.runAfterInteractions(() => {
+      LOG('PLAYER_BC', `Etkileşimler bitti, playerB/C play() çağrılıyor`, `${Date.now() - t0}ms sonra`);
+      playerB.play();
+      playerC.play();
+    });
+    return () => task.cancel();
+  }, [playerB, playerC]);
+
+  useEffect(() => {
     return () => {
+      LOG('UNMOUNT', 'Ekran kapanıyor, interval/timeout temizleniyor');
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (switchDebounceRef.current) clearTimeout(switchDebounceRef.current);
     };
   }, []);
 
   const switchVideo = useCallback(
     (newKey: VideoKey, nextKey: VideoKey | null, reason: string) => {
-      if (newKey === currentVideoKeyRef.current) return;
+      const callTs = ts();
+      if (newKey === currentVideoKeyRef.current) {
+        LOG('SWITCH', `[${callTs}] SKIP — zaten aktif video: ${newKey} (reason=${reason})`);
+        return;
+      }
+      LOG('SWITCH', `[${callTs}] BAŞLADI reason="${reason}" newKey=${newKey} nextKey=${nextKey}`);
       currentVideoKeyRef.current = newKey;
       const currentSlot = activeSlotRef.current;
       const slots = slotVideoRef.current;
@@ -128,23 +165,34 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
 
       if (foundSlot !== -1) {
         targetSlot = foundSlot as 0 | 1 | 2;
+        LOG('SWITCH', `  → slot${targetSlot} zaten ${newKey} içeriyor, replaceAsync GEREKMİYOR (hızlı geçiş)`);
       } else {
         targetSlot = ([0, 1, 2] as const).find(s => s !== currentSlot) ?? 1;
         slots[targetSlot] = newKey;
-        players[targetSlot].replaceAsync(VIDEO_ASSETS[newKey]);
+        LOG('SWITCH', `  → slot${targetSlot} için replaceAsync(${newKey}) BAŞLIYOR`);
+        const t0 = Date.now();
+        players[targetSlot]
+          .replaceAsync(VIDEO_ASSETS[newKey])
+          .then(() => LOG('REPLACE', `slot${targetSlot} replaceAsync(${newKey}) TAMAMLANDI`, `${Date.now() - t0}ms sürdü`))
+          .catch((e: any) => LOG('REPLACE', `slot${targetSlot} replaceAsync(${newKey}) HATA`, e));
         players[targetSlot].play();
       }
 
       activeSlotRef.current = targetSlot;
       setActiveSlot(targetSlot);
-      LOG('VIDEO', `🎬 ${reason} → slot${targetSlot} (${newKey})`);
+      LOG('SWITCH', `  → activeSlot=${targetSlot} olarak ayarlandı (${newKey})`);
 
       if (nextKey) {
         const freeSlot =
           ([0, 1, 2] as const).find(s => s !== targetSlot && slots[s] !== newKey) ?? 2;
         if (slots[freeSlot] !== nextKey) {
           slots[freeSlot] = nextKey;
-          players[freeSlot].replaceAsync(VIDEO_ASSETS[nextKey]);
+          LOG('SWITCH', `  → preload: slot${freeSlot} için replaceAsync(${nextKey}) BAŞLIYOR`);
+          const t1 = Date.now();
+          players[freeSlot]
+            .replaceAsync(VIDEO_ASSETS[nextKey])
+            .then(() => LOG('REPLACE', `slot${freeSlot} preload replaceAsync(${nextKey}) TAMAMLANDI`, `${Date.now() - t1}ms sürdü`))
+            .catch((e: any) => LOG('REPLACE', `slot${freeSlot} preload replaceAsync(${nextKey}) HATA`, e));
           players[freeSlot].play();
         }
       }
@@ -152,7 +200,6 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
     [players]
   );
 
-  // activeSlot değiştiğinde tüm slotları yumuşakça crossfade yap
   useEffect(() => {
     const animations = slotOpacities.map((opacity, idx) =>
       Animated.timing(opacity, {
@@ -161,23 +208,74 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
         useNativeDriver: true,
       })
     );
-    Animated.parallel(animations).start();
+    Animated.parallel(animations).start(() => {
+      LOG('CROSSFADE', `activeSlot=${activeSlot} crossfade animasyonu bitti`);
+    });
   }, [activeSlot, slotOpacities]);
 
   const seekToVerse = useCallback(
     (verseIndex: number) => {
+      const callTs = ts();
       const clamped = Math.max(0, Math.min(verseIndex, surahData.verses.length - 1));
-      const targetTime = surahData.verses[clamped].start;
-      audioPlayer.seekTo(targetTime);
-      currentVerseIndexRef.current = clamped - 1;
+
+      LOG('SEEK', `[${callTs}] seekToVerse çağrıldı → istenen=${verseIndex} clamped=${clamped}`);
+
+      // UI (ayet metni, swipe hesaplaması için ref) ANINDA güncellenir — hızlı hissettirir.
+      // Ama audioPlayer.seekTo() burada ÇAĞRILMAZ — o sadece debounce sonunda, TEK SEFER yapılır.
+      currentVerseIndexRef.current = clamped;
       setCurrentVerseIndex(clamped);
-      const newKey = videoKeys[clamped % videoKeys.length];
-      const nextKey = videoKeys[(clamped + 1) % videoKeys.length];
-      switchVideo(newKey, nextKey, `Seek→Ayet${clamped + 1}`);
+
+       pendingVerseRef.current = clamped;
+      pendingSeekRef.current = true;
+      if (switchDebounceRef.current) {
+        LOG('DEBOUNCE', `  önceki debounce iptal edildi (yeni swipe geldi)`);
+        clearTimeout(switchDebounceRef.current);
+      }
+      LOG('DEBOUNCE', `  180ms debounce zamanlayıcı kuruldu, pendingVerse=${clamped}`);
+      switchDebounceRef.current = setTimeout(() => {
+        const finalVerse = pendingVerseRef.current;
+        if (finalVerse === null) return;
+        const targetTime = surahData.verses[finalVerse].start;
+
+        LOG(
+          'DEBOUNCE',
+          `[${ts()}] debounce TETİKLENDİ → finalVerse=${finalVerse}, audioPlayer.seekTo(${targetTime}) ÇAĞRILIYOR (tek sefer)`
+        );
+
+        // Ses SADECE burada seek ediliyor — kaydırma serisi bittikten sonra tek çağrı.
+                audioPlayer.seekTo(targetTime);
+        lastManualSeekRef.current = { verse: finalVerse, ts: Date.now(), targetTime };
+        // ÖNEMLİ: pendingSeekRef'i BURADA kapatmıyoruz. seekTo() JS'te anında dönse de
+        // native tarafta pozisyon değişimi birkaç yüz ms sürüyor (bkz. SEEK_VERIFY logları).
+        // Flag'i erken kapatırsak tracking loop hâlâ eski currentTime'ı okuyup index'i
+        // geri sarabilir (RACE). Bu yüzden native'in gerçekten yetiştiğinden emin olana
+        // kadar tracking loop'u kapalı tutuyoruz.
+
+        setTimeout(() => {
+          const reached = Math.abs((audioPlayer.currentTime ?? 0) - targetTime) < 0.3;
+          LOG(
+            'SEEK_VERIFY',
+            `+150ms → audioPlayer.currentTime=${audioPlayer.currentTime?.toFixed(2)} (hedef=${targetTime}) playing=${audioPlayer.playing} reached=${reached}`
+          );
+          // 150ms sonra hedefe ulaşılmışsa tracking loop'u tekrar aç.
+          // Ulaşılmamışsa (nadir, yavaş cihaz) bir 150ms daha bekleyip zorla aç —
+          // sonsuza kadar kilitli kalmasın.
+          if (reached) {
+            pendingSeekRef.current = false;
+          } else {
+            setTimeout(() => {
+              pendingSeekRef.current = false;
+            }, 150);
+          }
+        }, 150);
+
+        const fk = videoKeys[finalVerse % videoKeys.length];
+        const fnk = videoKeys[(finalVerse + 1) % videoKeys.length];
+        switchVideo(fk, fnk, `Seek→Ayet${finalVerse + 1}`);
+      }, 180);
     },
     [audioPlayer, surahData.verses, videoKeys, switchVideo]
   );
-
   const triggerSwipeAnim = (direction: 'left' | 'right') => {
     const toValue = direction === 'left' ? -26 : 26;
     Animated.sequence([
@@ -189,15 +287,20 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      // Dikey kaydırmalarda (uzun ayet scroll'unda) yatay swipe'ı tetikleme
       onMoveShouldSetPanResponder: (_, gesture) =>
         Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.5 && Math.abs(gesture.dx) > 12,
       onPanResponderRelease: (_, gesture) => {
-        if (Math.abs(gesture.dx) < 50) return;
+        LOG('SWIPE', `onPanResponderRelease dx=${gesture.dx.toFixed(1)} dy=${gesture.dy.toFixed(1)} vx=${gesture.vx.toFixed(2)}`);
+        if (Math.abs(gesture.dx) < 50) {
+          LOG('SWIPE', `  → yoksayıldı (dx çok küçük)`);
+          return;
+        }
         if (gesture.dx < 0) {
+          LOG('SWIPE', `  → SOLA kaydırma, sonraki ayete geçiliyor (${currentVerseIndexRef.current} → ${currentVerseIndexRef.current + 1})`);
           triggerSwipeAnim('left');
           seekToVerse(currentVerseIndexRef.current + 1);
         } else {
+          LOG('SWIPE', `  → SAĞA kaydırma, önceki ayete geçiliyor (${currentVerseIndexRef.current} → ${currentVerseIndexRef.current - 1})`);
           triggerSwipeAnim('right');
           seekToVerse(currentVerseIndexRef.current - 1);
         }
@@ -206,8 +309,15 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
   ).current;
 
   const startTracking = useCallback(() => {
+    LOG('TRACK', 'startTracking başladı, 100ms interval kuruluyor');
     if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
+      intervalRef.current = setInterval(() => {
+      if (pendingSeekRef.current) {
+        // Kullanıcı az önce swipe yaptı, debounce hâlâ bekliyor / audioPlayer henüz
+        // yeni pozisyona seek edilmedi. Bu ara safhada currentTime eski değeri taşıyor,
+        // ona göre index hesaplarsak ayet numarasını yanlışlıkla geri düşürürüz. Atla.
+        return;
+      }
       const currentTime = audioPlayer.currentTime ?? 0;
       let newVerseIndex = 0;
 
@@ -218,16 +328,58 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
         }
       }
 
-      const newVideoKey = videoKeys[newVerseIndex % videoKeys.length];
-      const nextVideoKey = videoKeys[(newVerseIndex + 1) % videoKeys.length];
-
       if (newVerseIndex !== currentVerseIndexRef.current) {
+        const prevIndex = currentVerseIndexRef.current;
+
+        // --- RACE CONDITION TEŞHİSİ ---
+        // Yakın zamanda manuel bir seek yapıldıysa ve tracking loop
+        // farklı/beklenmedik bir index'e geçiyorsa, bu muhtemelen
+        // audioPlayer.currentTime henüz seekTo'yu yansıtmadığı için
+        // tracking loop'un eski pozisyona göre index hesaplayıp
+        // manuel seek'i EZMESİ durumudur — "ayet sesi gelmiyor" şikayetinin
+        // muhtemel kaynağı burasıdır.
+        const lastSeek = lastManualSeekRef.current;
+        if (lastSeek && Date.now() - lastSeek.ts < 500 && newVerseIndex !== lastSeek.verse) {
+          LOG(
+            'RACE',
+            `⚠️ ÇAKIŞMA ŞÜPHESİ: ${Date.now() - lastSeek.ts}ms önce ayet${lastSeek.verse + 1}'e (t=${lastSeek.targetTime}s) manuel seek yapılmıştı, ` +
+              `ama tracking loop şimdi currentTime=${currentTime.toFixed(2)} okuyup ayet${newVerseIndex + 1}'e geçiriyor. ` +
+              `Bu, manuel seek'i EZİYOR OLABİLİR.`
+          );
+        }
+
+        LOG(
+          'TRACK',
+          `[${ts()}] Ayet değişti: ${prevIndex + 1} → ${newVerseIndex + 1} (currentTime=${currentTime.toFixed(2)}s, verseStart=${surahData.verses[newVerseIndex]?.start}s)`
+        );
+
         currentVerseIndexRef.current = newVerseIndex;
         setCurrentVerseIndex(newVerseIndex);
+
+        const newVideoKey = videoKeys[newVerseIndex % videoKeys.length];
+        const nextVideoKey = videoKeys[(newVerseIndex + 1) % videoKeys.length];
         switchVideo(newVideoKey, nextVideoKey, `Ayet${newVerseIndex + 1}`);
+
+        const lookaheadKey = videoKeys[(newVerseIndex + 2) % videoKeys.length];
+        const slots = slotVideoRef.current;
+        const busy = new Set([activeSlotRef.current]);
+        const freeSlot = ([0, 1, 2] as const).find(
+          s => !busy.has(s) && slots[s] !== lookaheadKey && slots[s] !== nextVideoKey
+        );
+        if (freeSlot !== undefined && slots[freeSlot] !== lookaheadKey) {
+          slots[freeSlot] = lookaheadKey;
+          LOG('LOOKAHEAD', `slot${freeSlot} için lookahead replaceAsync(${lookaheadKey}) BAŞLIYOR`);
+          const t0 = Date.now();
+          players[freeSlot]
+            .replaceAsync(VIDEO_ASSETS[lookaheadKey])
+            .then(() => LOG('REPLACE', `slot${freeSlot} lookahead replaceAsync(${lookaheadKey}) TAMAMLANDI`, `${Date.now() - t0}ms sürdü`))
+            .catch((e: any) => LOG('REPLACE', `slot${freeSlot} lookahead replaceAsync(${lookaheadKey}) HATA`, e));
+          players[freeSlot].play();
+        }
       }
 
       if (audioPlayer.playing === false && currentTime > 5) {
+        LOG('TRACK', `audio durdu (playing=false, currentTime=${currentTime.toFixed(2)}), interval durduruluyor`);
         if (intervalRef.current) clearInterval(intervalRef.current);
       }
     }, 100);
@@ -237,19 +389,22 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
     if (currentVerseIndexRef.current === -1) {
       currentVerseIndexRef.current = 0;
       setCurrentVerseIndex(0);
+      LOG('INIT', 'İlk başlatma: ayet 0, video başlatılıyor');
       switchVideo(videoKeys[0], videoKeys[1], 'İlk başlatma');
     }
 
+    LOG('INIT', 'audioPlayer.play() çağrılıyor');
     audioPlayer.play();
     startTracking();
 
     return () => {
       try {
         if (audioPlayer && audioPlayer.playing) {
+          LOG('CLEANUP', 'audioPlayer.pause() çağrılıyor');
           audioPlayer.pause();
         }
       } catch (e) {
-        // Audio player zaten temizlenmiş olabilir
+        LOG('CLEANUP', 'audioPlayer pause hata (muhtemelen zaten temizlenmiş)', e);
       }
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
@@ -259,12 +414,10 @@ export default function VideoPlayerScreen({ surahNumber = 1 }: VideoPlayerScreen
   const progress =
     surahData.verses.length > 1 ? currentVerseIndex / (surahData.verses.length - 1) : 0;
 
-  // Ayet değiştiğinde uzun metinleri en baştan göster
   useEffect(() => {
     verseScrollRef.current?.scrollTo({ y: 0, animated: false });
   }, [currentVerseIndex]);
 
-  // Kaydırılabilir ipucu için pulse animasyonu (sadece taşma varken)
   useEffect(() => {
     if (!canScrollVerse) {
       scrollHintAnim.setValue(0);
@@ -409,9 +562,6 @@ const localStyles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   verseContainerFlex: {
-    // verseContainer'ın marginVertical: 60 değeri header/bottomMeta'dan
-    // pay çıkardığı için burada biraz daha muhafazakâr bir üst sınır
-    // veriyoruz; uzun ayetlerde taşma yerine iç scroll devreye giriyor.
     maxHeight: '42%',
   },
   verseScroll: {
